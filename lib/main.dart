@@ -14,8 +14,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: LoginScreen(),
+    return MaterialApp(
+      initialRoute: "/login",
+      routes: {
+        "/login": (context) => LoginScreen(),
+        "/orders/kanban": (context) => KanbanOrdersScreen()
+      },
     );
   }
 }

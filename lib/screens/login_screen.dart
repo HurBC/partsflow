@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/data/models/users/login_response.dart';
-import 'package:partsflow/data/repository.dart';
+import 'package:partsflow/screens/kanban_orders_screen.dart';
+import 'package:partsflow/services/user_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,8 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _showPasword = false;
   bool _isLogin = false;
-
-  Repository _repository = Repository();
 
   void _loginIntoPartsflow(BuildContext context) async {
     final scaffold = ScaffoldMessenger.of(context);
@@ -39,14 +40,35 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLogin = true;
     });
 
-    LoginResponse? response = await _repository.users.login(
-      email: _email!,
-      password: _password!,
-    );
+    try {
+      await AuthService.login(email: _email!, password: _password!);
 
-    setState(() {
-      _isLogin = false;
-    });
+      setState(() {
+        _isLogin = false;
+      });
+
+      scaffold.showSnackBar(
+        SnackBar(
+          content: Text("Inicio de sesion exitoso"),
+          backgroundColor: Colors.green.shade600,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+
+      Navigator.pushNamed(context, "/orders/kanban");
+    } on HttpException catch (e) {
+      setState(() {
+        _isLogin = false;
+      });
+
+      scaffold.showSnackBar(
+        SnackBar(
+          content: Text(e.message),
+          backgroundColor: Colors.red.shade600,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
