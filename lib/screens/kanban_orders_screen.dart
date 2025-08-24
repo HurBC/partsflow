@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:partsflow/components/orders/order_card.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
+import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order.dart';
 import 'package:partsflow/services/orders/kanban_service.dart';
 
@@ -15,16 +17,18 @@ class KanbanOrdersScreen extends StatefulWidget {
 class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
   Timer? _timer;
 
-  List<KanbanOrderRepostory> _kanbanOrders = [];
+  List<KanbanOrderRepository> _kanbanOrders = [];
+  List<KanbanOrderRepository> _toQuoteOrders = [];
+  List<KanbanOrderRepository> _saleOrders = [];
 
-  OrderStatusChoices _kanbanOrderStatus = OrderStatusChoices.purchaseCompleted;
+  static const int KANBAN_PAGE_SIZE = 10;
 
   @override
   void initState() {
     super.initState();
 
     _timer?.cancel();
-    _loadOrders();
+    _loadAllOrders();
   }
 
   @override
@@ -36,14 +40,18 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
     super.dispose();
   }
 
-  Future<void> _loadOrders() async {
+  Future<void> _loadAllOrders() async {
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       final data = await KanbanService.getKanbanOrders(
-        status: _kanbanOrderStatus,
+        status: [
+          OrderStatusChoices.optionsAccepted,
+          OrderStatusChoices.purchaseCompleted,
+        ],
+        limit: _KanbanOrdersScreenState.KANBAN_PAGE_SIZE,
       );
 
       setState(() {
-        _kanbanOrders = data;
+        _saleOrders = data;
       });
     });
   }
@@ -52,49 +60,25 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(builder: (context) => IconButton(onPressed: () {
+          Scaffold.of(context).openDrawer();
+        }, icon: Icon(Icons.menu, color: PartsflowColors.secondary,))),
+        backgroundColor: PartsflowColors.primary,
         title: Image.asset("assets/images/logo_partsflow_white.png"),
+      ),
+      drawer: Drawer(
         backgroundColor: PartsflowColors.primary,
       ),
-      drawer: Container(
-        decoration: BoxDecoration(color: Colors.red),
-        width: 300,
-        child: Column(children: [Text("data")]),
-      ),
-      body: Padding(
+      backgroundColor: PartsflowColors.background,
+      body: ListView.builder(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _kanbanOrderStatus = OrderStatusChoices.quotationSent;
-                    });
-                  },
-                  child: Text(OrderStatusChoices.quotationSent.toJson()),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _kanbanOrderStatus = OrderStatusChoices.canceled;
-                    });
-                  },
-                  child: Text(OrderStatusChoices.canceled.toJson()),
-                ),
-              ],
-            ),
-            Column(
-              children: _kanbanOrders
-                  .map(
-                    (ko) => Text(
-                      "${ko.id}-${ko.responsible ?? ko.responsibleData?.id}-${ko.clientDetails.fullName}-${ko.status.toJson()}",
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-        ),
+        itemCount: _saleOrders.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: OrderCard(order: _saleOrders[index]),
+          );
+        },
       ),
     );
   }

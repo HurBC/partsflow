@@ -1,9 +1,18 @@
 import 'package:flutter/widgets.dart';
 
 class PartsflowColors {
-  static const Color primary = Color(0xFF181D84);
-  static const Color accent = Color(0xFF38D5A9);
+  static const Color primary = Color(0xFF2027AC);
+  static const Color secondary = Color(0xFF43DBAD);
+  static const Color secondaryDark = Color(0xFF214F4B);
+  static const Color accent = Color(0xFFFF331F);
 
   // Backgrounds
-  static const Color background = Color(0xFFCFD7E7);
+  static const Color background = Color(0xFFEEEEFC);
+  static const Color backgroundSemiDark = Color(0xFFB5B5C0);
+  static const Color backgroundDark = Color(0xFF0F0A0A);
+  
+  // Misc
+  static const Color error = Color(0xFFED1C24);
+  static const Color alert = Color(0xFFF1D302);
+  static const Color confirm = Color(0xFF2A7221);
 }

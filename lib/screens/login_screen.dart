@@ -49,9 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       scaffold.showSnackBar(
         SnackBar(
-          content: Text("Inicio de sesion exitoso"),
-          backgroundColor: Colors.green.shade600,
+          backgroundColor: PartsflowColors.confirm,
           behavior: SnackBarBehavior.floating,
+          content: Text("Inicio de sesion exitoso"),
         ),
       );
 
@@ -63,9 +63,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       scaffold.showSnackBar(
         SnackBar(
-          content: Text(e.message),
-          backgroundColor: Colors.red.shade600,
+          backgroundColor: PartsflowColors.error,
           behavior: SnackBarBehavior.floating,
+          content: Text(e.message),
         ),
       );
     }
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 300,
           height: 350,
           decoration: BoxDecoration(
-            color: PartsflowColors.accent,
+            color: PartsflowColors.secondary,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   "Login in Partsflow",
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
-                    color: PartsflowColors.primary,
+                    color: PartsflowColors.secondaryDark,
                   ),
                 ),
                 SizedBox(
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(color: Colors.white),
                           prefixIcon: Icon(
                             Icons.email_outlined,
-                            color: PartsflowColors.primary,
+                            color: PartsflowColors.secondaryDark,
                           ),
                         ),
                       ),
@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(color: Colors.white),
                           prefixIcon: Icon(
                             Icons.lock_outlined,
-                            color: PartsflowColors.primary,
+                            color: PartsflowColors.secondaryDark,
                           ),
                           suffixIcon: GestureDetector(
                             onTap: () {
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               (_showPasword)
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: PartsflowColors.primary,
+                              color: PartsflowColors.secondaryDark,
                             ),
                           ),
                         ),
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             (_isLogin) ? "Ingresando..." : "Ingrersar",
                             style: TextStyle(
-                              color: PartsflowColors.accent,
+                              color: PartsflowColors.secondaryDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
