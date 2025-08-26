@@ -1,3 +1,4 @@
+import 'package:partsflow/data/models/cars/car.dart';
 import 'package:partsflow/data/models/cars/client_car.dart';
 import 'package:partsflow/data/models/clients/client_kanban.dart';
 import 'package:partsflow/data/models/order/enums/order_enums.dart';

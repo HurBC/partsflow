@@ -47,10 +47,13 @@ class ClientCarRepository {
 }
 
 class ClientCarSimpleCar extends ClientCarRepository {
-  final SimpleCar simpleCar;
+  final CarRespository? carDetails;
+
+  final String? infoSource;
+  final String? editionForSubsidiary;
 
   ClientCarSimpleCar({
-    required this.simpleCar,
+    this.carDetails,
     required super.id,
     super.plate,
     super.vin,
@@ -61,10 +64,12 @@ class ClientCarSimpleCar extends ClientCarRepository {
     super.fullName,
     required super.createdAt,
     required super.updatedAt,
+    this.infoSource,
+    this.editionForSubsidiary
   });
 
   factory ClientCarSimpleCar.fromJson(Map<String, dynamic> data) {
-    final simpleCar = SimpleCar.fromJson(data['car']);
+    final carDetails = CarRespository.fromJson(data['car']);
 
     data.remove("car");
 
@@ -76,8 +81,8 @@ class ClientCarSimpleCar extends ClientCarRepository {
       vin: baseClientCar.vin,
       motorNumber: baseClientCar.motorNumber,
       country: baseClientCar.country,
-      car: simpleCar.id,
-      simpleCar: simpleCar,
+      car: carDetails.id,
+      carDetails: carDetails,
       name: baseClientCar.name,
       fullName: baseClientCar.fullName,
       createdAt: baseClientCar.createdAt,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
+import 'package:partsflow/core/components/client_image.dart';
 import 'package:partsflow/core/components/tag.dart';
 import 'package:partsflow/core/utils/time_utils.dart';
+import 'package:partsflow/data/models/clients/client_kanban.dart';
 import 'package:partsflow/data/models/order/order.dart';
 import 'package:partsflow/data/models/order/order_product_quantity.dart';
 
@@ -26,32 +28,109 @@ class _OrderCardState extends State<OrderCard> {
 
   @override
   Widget build(BuildContext context) {
+    const double IMAGE_SIZE = 50;
+
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: PartsflowColors.background,
-        borderRadius: BorderRadius.circular(3),
+        color: PartsflowColors.background2,
+        borderRadius: BorderRadius.circular(8),
         border: BoxBorder.all(color: Colors.grey.shade600),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.all(4),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text("#${_order.id}"),
+                Row(
+                  spacing: 8,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Tag(
+                      title: "#${_order.id}",
+                      padding: 1.5,
+                      borderColor: PartsflowColors.background3,
+                      borderRadius: 4,
+                      textStyle: TextStyle(
+                        fontSize: 12,
+                        color: PartsflowColors.backgroundDark,
+                      ),
+                    ),
+                    Text("${_order.clientCarDetails?.plate}"),
+                  ],
+                ),
                 Spacer(),
                 Text(
                   getElapsedTime(_order.createdAt),
                   style: TextStyle(
                     fontSize: 12,
-                    color: PartsflowColors.secondaryDark,
+                    color: PartsflowColors.backgroundDark,
                   ),
                 ),
               ],
             ),
-            Text("ORDER INFO"),
-            Column(children: [getOpqsList(_order.opqs)]),
+            SizedBox(height: 8),
+            getOpqsList(_order.opqs),
+            Divider(color: PartsflowColors.backgroundSemiDark2),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: clientDetails(IMAGE_SIZE, _order.clientDetails),
+            ),
+            Text("${_order.clientCarDetails?.name?.split("-")[0].trim()}", textAlign: TextAlign.left),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container clientDetails(
+    double IMAGE_SIZE,
+    ClientKanbanRepository clientDetails,
+  ) {
+    return Container(
+      width: double.infinity,
+      height: 70,
+      decoration: BoxDecoration(
+        border: BoxBorder.all(color: PartsflowColors.backgroundSemiDark2),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          children: [
+            ClientImage(profilePictureUrl: clientDetails.profilePictureUrl, imageSize: IMAGE_SIZE,),
+            SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${clientDetails.fullName}",
+                      style: TextStyle(color: PartsflowColors.backgroundDark),
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "${clientDetails.phone}",
+                      style: TextStyle(color: PartsflowColors.backgroundDark),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                  width: 270,
+                  child: Text(
+                    "${clientDetails.lastMessage}",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -60,20 +139,20 @@ class _OrderCardState extends State<OrderCard> {
 
   SizedBox getOpqsList(List<OrderProductQuantityRepository> opqs) {
     return SizedBox(
+      height: 30,
       child: ListView.builder(
-        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
         itemCount: opqs.length,
-
         itemBuilder: (builder, index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2),
+          padding: const EdgeInsets.all(2),
           child: Tag(
             title: opqs[index].product.name,
-            color: PartsflowColors.backgroundSemiDark,
+            borderRadius: 4,
+            color: PartsflowColors.background3,
+            borderColor: PartsflowColors.backgroundSemiDark2,
+            textStyle: TextStyle(color: PartsflowColors.backgroundDark),
           ),
         ),
-        //Text(
-        //  "ORDER OPQ ID: ${opqs[index].id} PRODUCT ${opqs[index].product.name}",
-        //),
       ),
     );
   }

@@ -8,7 +8,10 @@ class PartsflowColors {
 
   // Backgrounds
   static const Color background = Color(0xFFEEEEFC);
+  static const Color background2 = Color(0xFFDADAE9);
+  static const Color background3 = Color(0xFFC6C6D3);
   static const Color backgroundSemiDark = Color(0xFFB5B5C0);
+  static const Color backgroundSemiDark2 = Color(0xFF9C9CA5);
   static const Color backgroundDark = Color(0xFF0F0A0A);
   
   // Misc

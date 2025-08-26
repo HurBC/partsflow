@@ -3,21 +3,37 @@ import 'package:partsflow/core/colors/partsflow_colors.dart';
 
 class Tag extends StatelessWidget {
   final String title;
-  Color? color;
+  final Color? color;
+  final Color? borderColor;
+  final TextStyle? textStyle;
+  final double? padding;
+  final double? borderRadius;
 
-  Tag({super.key, required this.title, this.color});
+  const Tag({
+    super.key,
+    required this.title,
+    this.color,
+    this.borderColor,
+    this.textStyle,
+    this.padding,
+    this.borderRadius
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(borderRadius ?? 2),
         color: color ?? PartsflowColors.background,
-        border: Border.all(color: PartsflowColors.secondaryDark),
+        border: Border.all(color: borderColor ?? PartsflowColors.secondaryDark),
       ),
-      child: Text(
-        title,
-        style: TextStyle(color: PartsflowColors.secondaryDark),
+      child: Padding(
+        padding: EdgeInsets.all(padding ?? 3),
+        child: Text(
+          title,
+          style: textStyle ?? TextStyle(color: PartsflowColors.secondaryDark),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
