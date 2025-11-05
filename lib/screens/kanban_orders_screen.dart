@@ -7,6 +7,7 @@ import 'package:partsflow/core/components/sort_tag_filter.dart';
 import 'package:partsflow/core/constants/orders.dart';
 import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order.dart';
+import 'package:partsflow/data/models/order/requests/order_requests.dart';
 import 'package:partsflow/services/orders/kanban_service.dart';
 
 class KanbanOrdersScreen extends StatefulWidget {
@@ -56,9 +57,13 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
         _isKanbanLoading = true;
       });
 
-      final data = await KanbanService.getKanbanOrders(
-        status: _kanbanOrdersStatus,
+      ListOrders params = ListOrders(
         limit: KANBAN_PAGE_SIZE,
+        status: _kanbanOrdersStatus
+      );
+
+      final data = await KanbanService.getKanbanOrders(
+        params
       );
 
       setState(() {
@@ -69,9 +74,13 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
 
     // Create the timer
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-      final data = await KanbanService.getKanbanOrders(
-        status: _kanbanOrdersStatus,
+      ListOrders params = ListOrders(
         limit: KANBAN_PAGE_SIZE,
+        status: _kanbanOrdersStatus
+      );
+
+      final data = await KanbanService.getKanbanOrders(
+        params
       );
 
       setState(() {
@@ -140,9 +149,15 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SortTagFilter(name: "Fecha"),
-                      SortTagFilter(name: "Prioridad"),
-                      SortTagFilter(name: "Plata"),
+                      SortTagFilter(name: "Fecha", onSortTypeChange: (sortType) {
+                        debugPrint("SORTED_TYPE $sortType" );
+                      },),
+                      SortTagFilter(name: "Prioridad", onSortTypeChange: (sortType) {
+                        
+                      },),
+                      SortTagFilter(name: "Plata", onSortTypeChange: (sortType) {
+                        
+                      },),
                     ],
                   ),
                 ],

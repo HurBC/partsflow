@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/core/components/client_image.dart';
@@ -33,9 +35,9 @@ class _OrderCardState extends State<OrderCard> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: PartsflowColors.background2,
+        color: PartsflowColors.primaryLight2,
         borderRadius: BorderRadius.circular(8),
-        border: BoxBorder.all(color: Colors.grey.shade600),
+        border: BoxBorder.all(color: PartsflowColors.primaryLight),
       ),
       child: Padding(
         padding: const EdgeInsets.all(4),
@@ -51,7 +53,7 @@ class _OrderCardState extends State<OrderCard> {
                     Tag(
                       title: "#${_order.id}",
                       padding: 1.5,
-                      borderColor: PartsflowColors.background3,
+                      borderColor: PartsflowColors.primaryLight,
                       borderRadius: 4,
                       textStyle: TextStyle(
                         fontSize: 12,
@@ -73,12 +75,17 @@ class _OrderCardState extends State<OrderCard> {
             ),
             SizedBox(height: 8),
             getOpqsList(_order.opqs),
-            Divider(color: PartsflowColors.backgroundSemiDark2),
+            Divider(color: PartsflowColors.primaryLight),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
-              child: clientDetails(IMAGE_SIZE, _order.clientDetails),
+              child: _order.clientDetails != null
+                  ? clientDetails(IMAGE_SIZE, _order.clientDetails!)
+                  : null,
             ),
-            Text("${_order.clientCarDetails?.name?.split("-")[0].trim()}", textAlign: TextAlign.left),
+            Text(
+              "${_order.clientCarDetails?.name?.split("-")[0].trim()}",
+              textAlign: TextAlign.left,
+            ),
           ],
         ),
       ),
@@ -89,18 +96,26 @@ class _OrderCardState extends State<OrderCard> {
     double IMAGE_SIZE,
     ClientKanbanRepository clientDetails,
   ) {
+    final fullName = clientDetails.fullName;
+    final clientName = fullName != null
+        ? fullName.substring(0, min(8, fullName.length))
+        : '';
+
     return Container(
       width: double.infinity,
       height: 70,
       decoration: BoxDecoration(
-        border: BoxBorder.all(color: PartsflowColors.backgroundSemiDark2),
+        border: BoxBorder.all(color: PartsflowColors.primaryLight),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Padding(
         padding: const EdgeInsets.all(4),
         child: Row(
           children: [
-            ClientImage(profilePictureUrl: clientDetails.profilePictureUrl, imageSize: IMAGE_SIZE,),
+            ClientImage(
+              profilePictureUrl: clientDetails.profilePictureUrl,
+              imageSize: IMAGE_SIZE,
+            ),
             SizedBox(width: 8),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -110,7 +125,7 @@ class _OrderCardState extends State<OrderCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${clientDetails.fullName}",
+                      clientName,
                       style: TextStyle(color: PartsflowColors.backgroundDark),
                     ),
                     SizedBox(width: 5),
@@ -147,9 +162,9 @@ class _OrderCardState extends State<OrderCard> {
           padding: const EdgeInsets.all(2),
           child: Tag(
             title: opqs[index].product.name,
-            borderRadius: 4,
-            color: PartsflowColors.background3,
-            borderColor: PartsflowColors.backgroundSemiDark2,
+            borderRadius: 2,
+            color: PartsflowColors.primaryLight3,
+            borderColor: PartsflowColors.primaryLight,
             textStyle: TextStyle(color: PartsflowColors.backgroundDark),
           ),
         ),

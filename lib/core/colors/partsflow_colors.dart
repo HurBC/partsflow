@@ -4,6 +4,7 @@ class PartsflowColors {
   static const Color primary = Color(0xFF2027AC);
   static const Color primaryLight = Color.fromARGB(255, 167, 183, 226);
   static const Color primaryLight2 = Color.fromARGB(255, 213, 223, 250);
+  static const Color primaryLight3 = Color.fromARGB(255, 168, 186, 236);
   static const Color secondary = Color(0xFF43DBAD);
   static const Color secondaryDark = Color(0xFF214F4B);
   static const Color accent = Color(0xFFFF331F);
@@ -19,5 +20,6 @@ class PartsflowColors {
   // Misc
   static const Color error = Color(0xFFED1C24);
   static const Color alert = Color(0xFFF1D302);
-  static const Color confirm = Color(0xFF2A7221);
+  static const Color confirm = Color(0xFF7CEA9C);
+  static const Color info = Color(0xFF5AB8F0);
 }

@@ -193,7 +193,7 @@ class OrderRepository {
 }
 
 class KanbanOrderRepository extends OrderRepository {
-  final ClientKanbanRepository clientDetails;
+  final ClientKanbanRepository? clientDetails;
   final ClientCarSimpleCar? clientCarDetails;
   final List<OrderProductQuantityRepository> opqs;
   final UserRepository? responsibleData;
