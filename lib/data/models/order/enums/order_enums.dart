@@ -135,6 +135,49 @@ extension OrderSourceChoicesExtension on OrderSourceChoices {
 extension OrderStatusChoicesExtension on OrderStatusChoices {
   String toJson() => _toSnakeCase(name);
 
+  static List<OrderStatusChoices> fromKanbanStatus(String status) {
+    List<OrderStatusChoices> orderStatuses = List.empty(growable: true);
+
+    switch (status) {
+      case "to_quote":
+        orderStatuses.addAll([
+          OrderStatusChoices.identifyingCar,
+          OrderStatusChoices.identifyingProducts,
+          OrderStatusChoices.searchingOems,
+          OrderStatusChoices.searchingStock,
+          OrderStatusChoices.orderQuoted,
+        ]);
+
+        break;
+      case "quotation_sent":
+        orderStatuses.addAll([OrderStatusChoices.quotationSent]);
+
+        break;
+      case "options_accepted":
+        orderStatuses.addAll([OrderStatusChoices.optionsAccepted]);
+
+        break;
+      case "sale_orders":
+        orderStatuses.addAll([OrderStatusChoices.purchaseCompleted]);
+
+        break;
+      case "finished":
+        orderStatuses.addAll([OrderStatusChoices.finished]);
+
+        break;
+      case "canceled":
+        orderStatuses.addAll([OrderStatusChoices.canceled]);
+
+        break;
+      case "devolution_requested":
+        orderStatuses.addAll([OrderStatusChoices.devolutionRequested]);
+
+        break;
+    }
+
+    return orderStatuses;
+  }
+
   static OrderStatusChoices? fromJson(String json) {
     return OrderStatusChoices.values.firstWhereOrNull(
       (e) => e.toJson() == json,

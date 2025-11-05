@@ -8,7 +8,7 @@ import 'package:partsflow/data/models/users/user.dart';
 class OrderRepository {
   final int id;
   final String? name;
-  final OrderSourceChoices source;
+  final OrderSourceChoices? source;
   final OrderOperationModeEnum operationMode;
   final OrderStatusChoices? prevStatus;
   final OrderStatusChoices status;
@@ -57,7 +57,7 @@ class OrderRepository {
   OrderRepository({
     required this.id,
     required this.name,
-    required this.source,
+    this.source,
     required this.operationMode,
     required this.prevStatus,
     required this.status,
@@ -108,7 +108,7 @@ class OrderRepository {
     return OrderRepository(
       id: json['id'] as int,
       name: json['name'] as String?,
-      source: OrderSourceChoicesExtension.fromJson(json['source'])!,
+      source: OrderSourceChoicesExtension.fromJson(json['source']),
       operationMode: OrderOperationModeEnumExtension.fromJson(
         json['operation_mode'],
       )!,

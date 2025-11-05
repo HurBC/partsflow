@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class PartsflowColors {
   static const Color primary = Color(0xFF2027AC);
+  static const Color primaryLight = Color.fromARGB(255, 167, 183, 226);
+  static const Color primaryLight2 = Color.fromARGB(255, 213, 223, 250);
   static const Color secondary = Color(0xFF43DBAD);
   static const Color secondaryDark = Color(0xFF214F4B);
   static const Color accent = Color(0xFFFF331F);

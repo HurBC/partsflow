@@ -15,7 +15,7 @@ class CarRespository {
   final Brand brand;
   final String model;
   final String? version;
-  final String displacement;
+  final String? displacement;
   final String? manufacturer;
   final String? firstMotorNumbers;
   final String? originCountry;
@@ -27,7 +27,7 @@ class CarRespository {
     required this.brand,
     required this.model,
     this.version,
-    required this.displacement,
+    this.displacement,
     this.manufacturer,
     this.firstMotorNumbers,
     this.originCountry,

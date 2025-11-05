@@ -65,7 +65,21 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(
           backgroundColor: PartsflowColors.error,
           behavior: SnackBarBehavior.floating,
-          content: Text(e.message),
+          content: Row(
+            children: [
+              const Icon(Icons.error_outline, color: Colors.white),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  e.message?.isNotEmpty == true
+                      ? e.message!
+                      : 'Ocurrió un error inesperado. Intenta nuevamente.',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
