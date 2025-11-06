@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import "package:http/http.dart" as http;
 import 'package:partsflow/core/components/sort_tag_filter.dart';
 import 'package:partsflow/core/globals/env.dart';
 import 'package:partsflow/core/globals/globals.dart';
-import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order.dart';
 import 'package:partsflow/data/models/order/requests/order_requests.dart';
 
@@ -28,30 +28,36 @@ class KanbanService {
       String key = element.key;
       var value = element.value;
 
+      debugPrint(
+        "[KANBAN_SERVICE]::[GET_ORDERS::ARGS::PARAMS]::[VALUE]::$value",
+      );
+
       if (value == null) return;
 
       if (value is List) {
         final listValues = value
             .map((item) {
-              if (item is Enum) {
-                try {
-                  final jsonValue = (item as dynamic).toJson();
-
-                  return jsonValue;
-                } catch (e) {
-                  return item.name;
-                }
-              }
-
               return item.toString();
             })
             .join(",");
 
         queryParams.write("$key=$listValues");
       } else if (value is SortTagSortingType) {
-        queryParams.write(
-          "$key=${value == SortTagSortingType.descendant ? "-$key" : key}",
-        );
+
+
+        if (key == "sort_by_category") {
+          queryParams.write(
+            "$key=${value == SortTagSortingType.descendant ? "-category_weight" : "category_weight"}",
+          );
+        } else if (key == "sort_by_estimated_ticket") {
+          queryParams.write(
+            "$key=${value == SortTagSortingType.descendant ? "-estimated_ticket" : "estimated_ticket"}",
+          );
+        } else {
+          queryParams.write(
+            "$key=${value == SortTagSortingType.descendant ? "-created_at" : "created_at"}",
+          );
+        }
       } else {
         queryParams.write('$key=$value');
       }
@@ -59,17 +65,15 @@ class KanbanService {
       if (element != mapParams.entries.last) queryParams.write("&");
     });
 
-    print("GETTING ORDERS WITH STATUS ${queryParams.toString()}");
+    debugPrint("GETTING ORDERS WITH PARAMS ${queryParams.toString()}");
 
     final response = await http.get(
-      Uri.parse(
-        "${_Configs.apiUrl}/?${queryParams.toString()}&sort_by=-created_at&offset=0",
-      ),
+      Uri.parse("${_Configs.apiUrl}/?${queryParams.toString()}"),
       headers: _Configs.headers,
     );
 
     if (response.statusCode != 200) {
-      print("ERROR BODY: ${response.body}");
+      debugPrint("ERROR BODY: ${response.body}");
 
       throw HttpException(
         "Error al obtener los pedidos. Codigo de error ${response.statusCode}",

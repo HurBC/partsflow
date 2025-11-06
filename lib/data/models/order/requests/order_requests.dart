@@ -5,14 +5,16 @@ import 'package:partsflow/data/models/order/enums/order_enums.dart';
 class ListOrders extends QueryParams {
   final List<OrderStatusChoices>? status;
   final SortTagSortingType? sortByCategory;
+  final SortTagSortingType? sortBy;
   final SortTagSortingType? sortByEstimatedTicket;
 
   const ListOrders({
     this.status,
     this.sortByCategory,
+    this.sortBy,
     this.sortByEstimatedTicket,
     super.limit,
-    super.offset
+    super.offset,
   });
 
   @override
@@ -20,15 +22,25 @@ class ListOrders extends QueryParams {
     final Map<String, dynamic> params = {
       'limit': limit,
       'offset': offset,
-      'sort_by_category': sortByCategory?.name,
-      'sort_by_estimated_ticket': sortByEstimatedTicket?.name,
-      'status': status?.map((e) => e.name).toList(),
+      'status': status?.map((e) => e.toJson()).toList(),
     };
 
-    params.removeWhere((_, value) => value == null,);
+    if (sortBy != SortTagSortingType.none) {
+      params.addEntries({"sort_by": sortBy}.entries);
+    }
+
+    if (sortByCategory != SortTagSortingType.none) {
+      params.addEntries({'sort_by_category': sortByCategory}.entries);
+    }
+
+    if (sortByEstimatedTicket != SortTagSortingType.none) {
+      params.addEntries(
+        {'sort_by_estimated_ticket': sortByEstimatedTicket}.entries,
+      );
+    }
+
+    params.removeWhere((_, value) => value == null);
 
     return params;
   }
-
-  
 }

@@ -5,6 +5,7 @@ import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/data/models/users/login_response.dart';
 import 'package:partsflow/screens/kanban_orders_screen.dart';
 import 'package:partsflow/services/user_service.dart';
+import 'package:vibration/vibration.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -61,20 +62,28 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLogin = false;
       });
 
+      if (await Vibration.hasVibrator()) {
+        debugPrint("Trying to make the phone vibrate");
+        Vibration.vibrate(duration: 500);
+      } else {
+        
+        debugPrint("The phone havent a vibrate system");
+      }
+
       scaffold.showSnackBar(
         SnackBar(
-          backgroundColor: PartsflowColors.error,
+          backgroundColor: Colors.white,
           behavior: SnackBarBehavior.floating,
           content: Row(
             children: [
-              const Icon(Icons.error_outline, color: Colors.white),
+              const Icon(Icons.error_outline, color: PartsflowColors.error),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   e.message?.isNotEmpty == true
                       ? e.message!
                       : 'Ocurrió un error inesperado. Intenta nuevamente.',
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: PartsflowColors.backgroundDark),
                 ),
               ),
             ],

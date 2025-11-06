@@ -26,6 +26,10 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
 
   ({String label, String value}) _selectedKanbanOrderStatus = kanbanStatus[0];
 
+  SortTagSortingType _categorySortType = SortTagSortingType.none;
+  SortTagSortingType _ticketSortType = SortTagSortingType.none;
+  SortTagSortingType _createdAtSortType = SortTagSortingType.none;
+
   /* Booleans */
   bool _isKanbanLoading = false;
 
@@ -41,8 +45,6 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
 
   @override
   void dispose() {
-    print("CLOSING KANBAN");
-
     _timer?.cancel();
 
     super.dispose();
@@ -59,7 +61,10 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
 
       ListOrders params = ListOrders(
         limit: KANBAN_PAGE_SIZE,
-        status: _kanbanOrdersStatus
+        status: _kanbanOrdersStatus,
+        sortByCategory: _categorySortType,
+        sortByEstimatedTicket: _ticketSortType,
+        sortBy: _createdAtSortType
       );
 
       final data = await KanbanService.getKanbanOrders(
@@ -76,7 +81,10 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
       ListOrders params = ListOrders(
         limit: KANBAN_PAGE_SIZE,
-        status: _kanbanOrdersStatus
+        status: _kanbanOrdersStatus,
+        sortByCategory: _categorySortType,
+        sortByEstimatedTicket: _ticketSortType,
+        sortBy: _createdAtSortType
       );
 
       final data = await KanbanService.getKanbanOrders(
@@ -97,11 +105,33 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
     List<OrderStatusChoices> newStatus =
         OrderStatusChoicesExtension.fromKanbanStatus(selectedOption.value);
 
-    debugPrint("SELECTED_VALUE $newStatus");
-
     setState(() {
       _kanbanOrdersStatus = newStatus;
       _selectedKanbanOrderStatus = selectedOption;
+    });
+
+    _loadAllOrders(immediateLoad: true);
+  }
+
+  void _handleOnCategoryChange(SortTagSortingType sortType) {
+    setState(() {
+      _categorySortType = sortType;
+    });
+
+    _loadAllOrders(immediateLoad: true);
+  }
+
+  void _handleOnTicketChange(SortTagSortingType sortType) {
+    setState(() {
+      _ticketSortType = sortType;
+    });
+
+    _loadAllOrders(immediateLoad: true);
+  }
+
+  void _handleOnDateChange(SortTagSortingType sortType) {
+    setState(() {
+      _createdAtSortType = sortType;
     });
 
     _loadAllOrders(immediateLoad: true);
@@ -149,15 +179,9 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SortTagFilter(name: "Fecha", onSortTypeChange: (sortType) {
-                        debugPrint("SORTED_TYPE $sortType" );
-                      },),
-                      SortTagFilter(name: "Prioridad", onSortTypeChange: (sortType) {
-                        
-                      },),
-                      SortTagFilter(name: "Plata", onSortTypeChange: (sortType) {
-                        
-                      },),
+                      SortTagFilter(name: "Fecha", onSortTypeChange: _handleOnDateChange,),
+                      SortTagFilter(name: "Prioridad", onSortTypeChange: _handleOnCategoryChange,),
+                      SortTagFilter(name: "Plata", onSortTypeChange: _handleOnTicketChange,),
                     ],
                   ),
                 ],

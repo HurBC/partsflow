@@ -16,7 +16,6 @@ class SortTagFilter extends StatefulWidget {
 class _SortTagFilterState extends State<SortTagFilter> {
   late final String _name;
   late IconData _iconData = Icons.remove;
-  late void Function(SortTagSortingType sortType) _onSortTypeChange;
 
   SortTagSortingType _sortType = SortTagSortingType.none;
 
@@ -25,7 +24,6 @@ class _SortTagFilterState extends State<SortTagFilter> {
     super.initState();
 
     _name = widget.name;
-    _onSortTypeChange = widget.onSortTypeChange;
   }
 
   void _handleOnTap(BuildContext context) {
@@ -72,12 +70,12 @@ class _SortTagFilterState extends State<SortTagFilter> {
       ),
     );
 
+    widget.onSortTypeChange(currentIsSorted);
+
     setState(() {
       _sortType = currentIsSorted;
       _iconData = currentIconData;
     });
-
-    _onSortTypeChange(currentIsSorted);
   }
 
   @override

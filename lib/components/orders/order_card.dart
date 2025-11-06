@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:partsflow/core/colors/orders_colors.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/core/components/client_image.dart';
 import 'package:partsflow/core/components/tag.dart';
@@ -20,12 +21,58 @@ class OrderCard extends StatefulWidget {
 
 class _OrderCardState extends State<OrderCard> {
   late KanbanOrderRepository _order;
+  late List<Color> _cardBgColors = [
+    PartsflowColors.primaryLight2,
+    PartsflowColors.primaryLight2,
+  ];
+  late Color _cardBorderColor = PartsflowColors.primaryLight;
 
   @override
   void initState() {
     super.initState();
 
     _order = widget.order;
+
+    if (_order.estimatedCategory != null) {
+      late List<Color> cardBgColors;
+      late Color cardBorderColor;
+
+      switch (_order.estimatedCategory) {
+        case "gold":
+          cardBgColors = OrdersColors.goldGradient;
+          cardBorderColor = OrdersColors.goldBorder;
+
+          break;
+        case "silver":
+          cardBgColors = OrdersColors.silverGradient;
+          cardBorderColor = OrdersColors.silverBorder;
+
+          break;
+        case "bronze":
+          cardBgColors = OrdersColors.bronzeGradient;
+          cardBorderColor = OrdersColors.bronzeBorder;
+
+          break;
+        case "trash":
+          cardBgColors = OrdersColors.trashGradient;
+          cardBorderColor = OrdersColors.trashBorder;
+
+          break;
+        default:
+          cardBgColors = [
+            PartsflowColors.primaryLight2,
+            PartsflowColors.primaryLight2,
+          ];
+          cardBorderColor = PartsflowColors.primaryLight;
+
+          break;
+      }
+
+      setState(() {
+        _cardBgColors = cardBgColors;
+        _cardBorderColor = cardBorderColor;
+      });
+    }
   }
 
   @override
@@ -35,9 +82,13 @@ class _OrderCardState extends State<OrderCard> {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: PartsflowColors.primaryLight2,
+        gradient: LinearGradient(
+          colors: _cardBgColors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         borderRadius: BorderRadius.circular(8),
-        border: BoxBorder.all(color: PartsflowColors.primaryLight),
+        border: BoxBorder.all(color: _cardBorderColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(4),
@@ -53,14 +104,23 @@ class _OrderCardState extends State<OrderCard> {
                     Tag(
                       title: "#${_order.id}",
                       padding: 1.5,
-                      borderColor: PartsflowColors.primaryLight,
+                      borderColor: _cardBorderColor,
                       borderRadius: 4,
                       textStyle: TextStyle(
                         fontSize: 12,
                         color: PartsflowColors.backgroundDark,
                       ),
                     ),
-                    Text("${_order.clientCarDetails?.plate}"),
+                    Text(
+                      _order.clientCarDetails?.plate != null
+                          ? "${_order.clientCarDetails?.plate}"
+                          : "",
+                    ),
+                    Text(
+                      _order.estimatedTicket != null
+                          ? "\$${_order.estimatedTicket}"
+                          : "",
+                    ),
                   ],
                 ),
                 Spacer(),
@@ -75,7 +135,7 @@ class _OrderCardState extends State<OrderCard> {
             ),
             SizedBox(height: 8),
             getOpqsList(_order.opqs),
-            Divider(color: PartsflowColors.primaryLight),
+            Divider(color: _cardBorderColor),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: _order.clientDetails != null
@@ -105,7 +165,7 @@ class _OrderCardState extends State<OrderCard> {
       width: double.infinity,
       height: 70,
       decoration: BoxDecoration(
-        border: BoxBorder.all(color: PartsflowColors.primaryLight),
+        border: BoxBorder.all(color: _cardBorderColor),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Padding(
@@ -163,8 +223,8 @@ class _OrderCardState extends State<OrderCard> {
           child: Tag(
             title: opqs[index].product.name,
             borderRadius: 2,
-            color: PartsflowColors.primaryLight3,
-            borderColor: PartsflowColors.primaryLight,
+            color: _cardBgColors[0],
+            borderColor: _cardBorderColor,
             textStyle: TextStyle(color: PartsflowColors.backgroundDark),
           ),
         ),

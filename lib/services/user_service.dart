@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:partsflow/core/globals/env.dart';
 import 'package:partsflow/core/globals/globals.dart';
 import 'package:partsflow/data/models/users/login_response.dart';
@@ -17,11 +18,9 @@ class AuthService {
   }) async {
     var apiUrl = _Configs.apiUrl;
 
-    print(apiUrl);
-
     // var jsonBody = jsonEncode();
 
-    print(
+    debugPrint(
       "SIGN IN WITH CREDENTIALS: ${{"email": email, "password": password}}",
     );
 
@@ -35,7 +34,7 @@ class AuthService {
     );
 
     if (response.statusCode != 200) {
-      print("ERROR BODY: ${response.body}");
+      debugPrint("ERROR BODY: ${response.body}");
 
       throw HttpException(
         "Error al iniciar sesion. Codigo de error: ${response.statusCode}",
