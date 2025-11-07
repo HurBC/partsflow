@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/data/models/users/login_response.dart';
-import 'package:partsflow/screens/kanban_orders_screen.dart';
+import 'package:partsflow/screens/orders/kanban/kanban_orders_screen.dart';
 import 'package:partsflow/services/user_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -15,7 +16,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String? _email, _password;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   bool _showPasword = false;
   bool _isLogin = false;
@@ -23,13 +25,16 @@ class _LoginScreenState extends State<LoginScreen> {
   void _loginIntoPartsflow(BuildContext context) async {
     final scaffold = ScaffoldMessenger.of(context);
 
-    if (_email == null) {
+    String email = _emailController.text;
+    String password =  _passwordController.text;
+
+    if (email.isEmpty) {
       scaffold.showSnackBar(SnackBar(content: Text("El correo es necesario")));
 
       return;
     }
 
-    if (_password == null) {
+    if (password.isEmpty) {
       scaffold.showSnackBar(
         SnackBar(content: Text("La contraseña es necesaria")),
       );
@@ -42,7 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      await AuthService.login(email: _email!, password: _password!);
+      debugPrint("TRYING TO LOGIN WITH $email $password");
+
+      await AuthService.login(email: email, password: password);
+
+      
+      debugPrint("LOGIN WITH $email $password");
 
       setState(() {
         _isLogin = false;
@@ -56,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      Navigator.pushNamed(context, "/orders/kanban");
+      context.go("/orders/kanban");
     } on HttpException catch (e) {
       setState(() {
         _isLogin = false;
@@ -80,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  e.message?.isNotEmpty == true
-                      ? e.message!
+                  e.message.isNotEmpty == true
+                      ? e.message
                       : 'Ocurrió un error inesperado. Intenta nuevamente.',
                   style: const TextStyle(color: PartsflowColors.backgroundDark),
                 ),
@@ -124,12 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       TextField(
+                        controller: _emailController,
                         style: TextStyle(color: Colors.white),
-                        onChanged: (value) {
-                          setState(() {
-                            _email = value;
-                          });
-                        },
                         decoration: InputDecoration(
                           hintText: "Ingrersa tu email",
                           hintStyle: TextStyle(color: Colors.white),
@@ -140,13 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       TextField(
+                        controller: _passwordController,
                         obscureText: !_showPasword,
                         style: TextStyle(color: Colors.white),
-                        onChanged: (value) {
-                          setState(() {
-                            _password = value;
-                          });
-                        },
                         decoration: InputDecoration(
                           hintText: "Ingrersa tu contaseña",
                           hintStyle: TextStyle(color: Colors.white),

@@ -1,5 +1,5 @@
-import 'package:partsflow/data/models/cars/car.dart';
 import 'package:partsflow/data/models/cars/client_car.dart';
+import 'package:partsflow/data/models/clients/client.dart';
 import 'package:partsflow/data/models/clients/client_kanban.dart';
 import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order_product_quantity.dart';
@@ -338,4 +338,127 @@ class KanbanOrderRepository extends OrderRepository {
       responsibleData: responsible,
     );
   }
+}
+
+class OrderDetailRespository extends OrderRepository {
+  final ClientRepository? clientDetails;
+  final UserRepository? responsibleDetails;
+
+  OrderDetailRespository({
+    required super.id,
+    required super.name,
+    required super.operationMode,
+    required super.prevStatus,
+    required super.status,
+    required super.nextStatus,
+    required super.estimatedCategory,
+    required super.client,
+    required super.estimatedTicket,
+    required super.carIdentificationStatus,
+    required super.productIdentificationStatus,
+    required super.productRequestedCount,
+    required super.productIdentifiedCount,
+    required super.oemSearchStatus,
+    required super.stockSearchStatus,
+    required super.cancelReason,
+    required super.isProposalSent,
+    required super.isQuotationsLinkOpened,
+    required super.isAiMarkAsPurchase,
+    required super.aiMarkAsPurchaseAt,
+    required super.subsidiary,
+    required super.clientCar,
+    required super.acceptedAt,
+    required super.quotationsExpirationDate,
+    required super.internalSaleNumber,
+    required super.ticket,
+    required super.quotationSubstate,
+    required super.quotationSubstateChangeDate,
+    required super.isQuotationSubstateIdentifiedByAgent,
+    required super.paymentMethod,
+    required super.isPaymentIdentifiedByAgent,
+    required super.paymentDate,
+    required super.paymentVerified,
+    required super.paymentVerifiedByMethod,
+    required super.paymentVerifiedBy,
+    required super.paymentVerifiedDate,
+    required super.deliveryMethod,
+    required super.tentativeWithdrawalDate,
+    required super.effectiveWithdrawalDate,
+    required super.isWithdrawalPersonClient,
+    required super.tentativeShippingDate,
+    required super.courier,
+    required super.shippingTrackingNumber,
+    required super.createdAt,
+    required super.updatedAt,
+    required super.source,
+    this.clientDetails,
+    this.responsibleDetails, required super.responsible
+  });
+
+  factory OrderDetailRespository.fromJson(Map<String, dynamic> json) {
+    ClientRepository? client = json.containsKey("client") && json["client"] != null ?
+    ClientRepository.fromJson(json["client"]) : null;
+
+    UserRepository? responsible = json.containsKey("responsible") && json["responsible"] != null ?
+    UserRepository.fromJson(json["responsible"]) : null;
+
+    json.remove("client");
+    json.remove("responsible");
+
+    final baseOrder = OrderRepository.fromJson(json);
+
+    return OrderDetailRespository(
+      id: baseOrder.id,
+      name: baseOrder.name,
+      source: baseOrder.source,
+      operationMode: baseOrder.operationMode,
+      prevStatus: baseOrder.prevStatus,
+      status: baseOrder.status,
+      nextStatus: baseOrder.nextStatus,
+      estimatedCategory: baseOrder.estimatedCategory,
+      estimatedTicket: baseOrder.estimatedTicket,
+      carIdentificationStatus: baseOrder.carIdentificationStatus,
+      productIdentificationStatus: baseOrder.productIdentificationStatus,
+      productRequestedCount: baseOrder.productRequestedCount,
+      productIdentifiedCount: baseOrder.productIdentifiedCount,
+      oemSearchStatus: baseOrder.oemSearchStatus,
+      stockSearchStatus: baseOrder.stockSearchStatus,
+      cancelReason: baseOrder.cancelReason,
+      isProposalSent: baseOrder.isProposalSent,
+      isQuotationsLinkOpened: baseOrder.isQuotationsLinkOpened,
+      isAiMarkAsPurchase: baseOrder.isAiMarkAsPurchase,
+      aiMarkAsPurchaseAt: baseOrder.aiMarkAsPurchaseAt,
+      subsidiary: baseOrder.subsidiary,
+      // Para `super.client` y `super.responsible`, se utiliza el ID de los objetos detallados.
+      // Esto es consistente con KanbanOrderRepository y asegura que los campos de la base estén poblados.
+      client: client?.id,
+      clientCar: baseOrder.clientCar,
+      responsible: responsible?.id,
+      acceptedAt: baseOrder.acceptedAt,
+      quotationsExpirationDate: baseOrder.quotationsExpirationDate,
+      internalSaleNumber: baseOrder.internalSaleNumber,
+      ticket: baseOrder.ticket,
+      quotationSubstate: baseOrder.quotationSubstate,
+      quotationSubstateChangeDate: baseOrder.quotationSubstateChangeDate,
+      isQuotationSubstateIdentifiedByAgent:
+          baseOrder.isQuotationSubstateIdentifiedByAgent,
+      paymentMethod: baseOrder.paymentMethod,
+      isPaymentIdentifiedByAgent: baseOrder.isPaymentIdentifiedByAgent,
+      paymentDate: baseOrder.paymentDate,
+      paymentVerified: baseOrder.paymentVerified,
+      paymentVerifiedByMethod: baseOrder.paymentVerifiedByMethod,
+      paymentVerifiedBy: baseOrder.paymentVerifiedBy,
+      paymentVerifiedDate: baseOrder.paymentVerifiedDate,
+      deliveryMethod: baseOrder.deliveryMethod,
+      tentativeWithdrawalDate: baseOrder.tentativeWithdrawalDate,
+      effectiveWithdrawalDate: baseOrder.effectiveWithdrawalDate,
+      isWithdrawalPersonClient: baseOrder.isWithdrawalPersonClient,
+      tentativeShippingDate: baseOrder.tentativeShippingDate,
+      courier: baseOrder.courier,
+      shippingTrackingNumber: baseOrder.shippingTrackingNumber,
+      createdAt: baseOrder.createdAt,
+      updatedAt: baseOrder.updatedAt,
+      clientDetails: client,
+      responsibleDetails: responsible,
+    );}
 }

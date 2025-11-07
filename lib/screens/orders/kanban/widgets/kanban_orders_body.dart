@@ -1,23 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:partsflow/components/orders/order_card.dart';
-import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/core/components/sort_tag_filter.dart';
 import 'package:partsflow/core/constants/orders.dart';
 import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order.dart';
 import 'package:partsflow/data/models/order/requests/order_requests.dart';
+import 'package:partsflow/screens/orders/widgets/order_card.dart';
 import 'package:partsflow/services/orders/kanban_service.dart';
 
-class KanbanOrdersScreen extends StatefulWidget {
-  const KanbanOrdersScreen({super.key});
+const int KANBAN_PAGE_SIZE = 10;
+
+class KanbanOrdersBody extends StatefulWidget {
+  const KanbanOrdersBody({super.key});
 
   @override
-  State<KanbanOrdersScreen> createState() => _KanbanOrdersScreenState();
+  State<KanbanOrdersBody> createState() => _KanbanOrdersBodyState();
 }
 
-class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
+class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
+  /* States */
   Timer? _timer;
 
   List<KanbanOrderRepository> _kanbanOrders = [];
@@ -30,11 +32,9 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
   SortTagSortingType _ticketSortType = SortTagSortingType.none;
   SortTagSortingType _createdAtSortType = SortTagSortingType.none;
 
-  /* Booleans */
   bool _isKanbanLoading = false;
 
-  static const int KANBAN_PAGE_SIZE = 10;
-
+  /* Methods */
   @override
   void initState() {
     super.initState();
@@ -139,22 +139,7 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: Icon(Icons.menu, color: PartsflowColors.secondary),
-          ),
-        ),
-        backgroundColor: PartsflowColors.primary,
-        title: Image.asset("assets/images/logo_partsflow_white.png"),
-      ),
-      drawer: Drawer(backgroundColor: PartsflowColors.primary),
-      backgroundColor: PartsflowColors.background,
-      body: Center(
+    return Center(
         child: Column(
           children: [
             Padding(
@@ -205,7 +190,6 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

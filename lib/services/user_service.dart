@@ -26,12 +26,12 @@ class AuthService {
 
     final response = await http.post(
       Uri.parse("${_Configs.apiUrl}/login/"),
-      body: {"email": email, "password": password},
-      // headers: {
-      //   "accept": "application/json",
-      //   "Content-Type": "application/json",
-      // },
-    );
+      body: jsonEncode({"email": email, "password": password}),
+      headers: {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+      },
+    ).timeout(const Duration(seconds: 10));
 
     if (response.statusCode != 200) {
       debugPrint("ERROR BODY: ${response.body}");

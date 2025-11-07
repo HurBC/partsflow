@@ -24,15 +24,11 @@ class KanbanService {
     final queryParams = StringBuffer("");
     final mapParams = params.toMap();
 
-    mapParams.entries.forEach((element) {
+    for (var element in mapParams.entries) {
       String key = element.key;
       var value = element.value;
 
-      debugPrint(
-        "[KANBAN_SERVICE]::[GET_ORDERS::ARGS::PARAMS]::[VALUE]::$value",
-      );
-
-      if (value == null) return;
+      if (value == null) continue;
 
       if (value is List) {
         final listValues = value
@@ -63,7 +59,7 @@ class KanbanService {
       }
 
       if (element != mapParams.entries.last) queryParams.write("&");
-    });
+    }
 
     debugPrint("GETTING ORDERS WITH PARAMS ${queryParams.toString()}");
 

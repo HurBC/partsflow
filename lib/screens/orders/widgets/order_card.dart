@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:partsflow/core/colors/orders_colors.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/core/components/client_image.dart';
@@ -77,83 +78,88 @@ class _OrderCardState extends State<OrderCard> {
 
   @override
   Widget build(BuildContext context) {
-    const double IMAGE_SIZE = 50;
+    const double imageSize = 50;
 
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: _cardBgColors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(8),
-        border: BoxBorder.all(color: _cardBorderColor),
-      ),
-      child: Padding(
+    return GestureDetector(
+      onTap: () {
+        context.push("/orders/kanban/order/${_order.id}");
+      },
+      child: Container(
         padding: const EdgeInsets.all(4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Row(
-                  spacing: 8,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Tag(
-                      title: "#${_order.id}",
-                      padding: 1.5,
-                      borderColor: _cardBorderColor,
-                      borderRadius: 4,
-                      textStyle: TextStyle(
-                        fontSize: 12,
-                        color: PartsflowColors.backgroundDark,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: _cardBgColors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(8),
+          border: BoxBorder.all(color: _cardBorderColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Row(
+                    spacing: 8,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Tag(
+                        title: "#${_order.id}",
+                        padding: 1.5,
+                        borderColor: _cardBorderColor,
+                        borderRadius: 4,
+                        textStyle: TextStyle(
+                          fontSize: 12,
+                          color: PartsflowColors.backgroundDark,
+                        ),
                       ),
-                    ),
-                    Text(
-                      _order.clientCarDetails?.plate != null
-                          ? "${_order.clientCarDetails?.plate}"
-                          : "",
-                    ),
-                    Text(
-                      _order.estimatedTicket != null
-                          ? "\$${_order.estimatedTicket}"
-                          : "",
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  getElapsedTime(_order.createdAt),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: PartsflowColors.backgroundDark,
+                      Text(
+                        _order.clientCarDetails?.plate != null
+                            ? "${_order.clientCarDetails?.plate}"
+                            : "",
+                      ),
+                      Text(
+                        _order.estimatedTicket != null
+                            ? "\$${_order.estimatedTicket}"
+                            : "",
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8),
-            getOpqsList(_order.opqs),
-            Divider(color: _cardBorderColor),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: _order.clientDetails != null
-                  ? clientDetails(IMAGE_SIZE, _order.clientDetails!)
-                  : null,
-            ),
-            Text(
-              "${_order.clientCarDetails?.name?.split("-")[0].trim()}",
-              textAlign: TextAlign.left,
-            ),
-          ],
+                  Spacer(),
+                  Text(
+                    getElapsedTime(_order.createdAt),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: PartsflowColors.backgroundDark,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              getOpqsList(_order.opqs),
+              Divider(color: _cardBorderColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: _order.clientDetails != null
+                    ? clientDetails(imageSize, _order.clientDetails!)
+                    : null,
+              ),
+              Text(
+                "${_order.clientCarDetails?.name?.split("-")[0].trim()}",
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Container clientDetails(
-    double IMAGE_SIZE,
+    double imageSize,
     ClientKanbanRepository clientDetails,
   ) {
     final fullName = clientDetails.fullName;
@@ -174,7 +180,7 @@ class _OrderCardState extends State<OrderCard> {
           children: [
             ClientImage(
               profilePictureUrl: clientDetails.profilePictureUrl,
-              imageSize: IMAGE_SIZE,
+              imageSize: imageSize,
             ),
             SizedBox(width: 8),
             Column(
