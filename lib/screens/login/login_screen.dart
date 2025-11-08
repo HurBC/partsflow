@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
-import 'package:partsflow/data/models/users/login_response.dart';
-import 'package:partsflow/screens/orders/kanban/kanban_orders_screen.dart';
 import 'package:partsflow/services/user_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -62,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         SnackBar(
           backgroundColor: PartsflowColors.confirm,
           behavior: SnackBarBehavior.floating,
-          content: Text("Inicio de sesion exitoso"),
+          content: const Text("Inicio de sesion exitoso"),
         ),
       );
 
@@ -120,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Text(
+                const Text(
                   "Login in Partsflow",
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
@@ -135,8 +133,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       TextField(
                         controller: _emailController,
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
                           hintText: "Ingrersa tu email",
                           hintStyle: TextStyle(color: Colors.white),
                           prefixIcon: Icon(
@@ -148,11 +146,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextField(
                         controller: _passwordController,
                         obscureText: !_showPasword,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           hintText: "Ingrersa tu contaseña",
-                          hintStyle: TextStyle(color: Colors.white),
-                          prefixIcon: Icon(
+                          hintStyle: const TextStyle(color: Colors.white),
+                          prefixIcon: const Icon(
                             Icons.lock_outlined,
                             color: PartsflowColors.secondaryDark,
                           ),
@@ -189,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Text(
                             (_isLogin) ? "Ingresando..." : "Ingrersar",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: PartsflowColors.secondaryDark,
                               fontWeight: FontWeight.bold,
                             ),

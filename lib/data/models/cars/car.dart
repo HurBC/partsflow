@@ -12,7 +12,6 @@ class SimpleCar {
 
 class CarRespository {
   final int id;
-  final Brand brand;
   final String model;
   final String? version;
   final String? displacement;
@@ -24,7 +23,6 @@ class CarRespository {
 
   CarRespository({
     required this.id,
-    required this.brand,
     required this.model,
     this.version,
     this.displacement,
@@ -36,11 +34,9 @@ class CarRespository {
   });
 
   factory CarRespository.fromJson(Map<String, dynamic> json) {
-    var brand = Brand.fromJson(json["brand"]);
 
     return CarRespository(
       id: json["id"],
-      brand: brand,
       model: json["model"],
       version: json["version"],
       displacement: json["displacement"],
@@ -49,6 +45,78 @@ class CarRespository {
       originCountry: json["originCountry"],
       originalModel: json["originalModel"],
       year: json["year"],
+    );
+  }
+}
+
+class CarWithoutBrandRespository extends CarRespository {
+  final int? brand;
+
+  CarWithoutBrandRespository({
+    required this.brand,
+    required super.id,
+    required super.model,
+    super.version,
+    super.displacement,
+    super.manufacturer,
+    super.firstMotorNumbers,
+    super.originCountry,
+    super.originalModel,
+    required super.year,
+  });
+
+  factory CarWithoutBrandRespository.fromJson(Map<String, dynamic> json) {
+    CarRespository baseCar = CarRespository.fromJson(json);
+
+    return CarWithoutBrandRespository(
+      id: baseCar.id,
+      brand: json["brand"],
+      model: baseCar.model,
+      version: baseCar.version,
+      displacement: baseCar.displacement,
+      manufacturer: baseCar.manufacturer,
+      firstMotorNumbers: baseCar.firstMotorNumbers,
+      originCountry: baseCar.originCountry,
+      originalModel: baseCar.originalModel,
+      year: baseCar.year,
+    );
+  }
+}
+
+class CarWithBrandRespository extends CarRespository {
+  final Brand brand;
+
+  CarWithBrandRespository({
+    required this.brand,
+    required super.id,
+    required super.model,
+    super.version,
+    super.displacement,
+    super.manufacturer,
+    super.firstMotorNumbers,
+    super.originCountry,
+    super.originalModel,
+    required super.year,
+  });
+
+  factory CarWithBrandRespository.fromJson(Map<String, dynamic> json) {
+    var brand = Brand.fromJson(json["brand"]);
+
+    json.remove("brand");
+
+    CarRespository baseCar = CarRespository.fromJson(json);
+
+    return CarWithBrandRespository(
+      id: baseCar.id,
+      brand: brand,
+      model: baseCar.model,
+      version: baseCar.version,
+      displacement: baseCar.displacement,
+      manufacturer: baseCar.manufacturer,
+      firstMotorNumbers: baseCar.firstMotorNumbers,
+      originCountry: baseCar.originCountry,
+      originalModel: baseCar.originalModel,
+      year: baseCar.year,
     );
   }
 }

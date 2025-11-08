@@ -128,7 +128,7 @@ class _OrderCardState extends State<OrderCard> {
                       ),
                     ],
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     getElapsedTime(_order.createdAt),
                     style: TextStyle(
@@ -138,8 +138,8 @@ class _OrderCardState extends State<OrderCard> {
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              getOpqsList(_order.opqs),
+              const SizedBox(height: 8),
+              if (_order.opqs.isNotEmpty) getOpqsList(_order.opqs),
               Divider(color: _cardBorderColor),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
@@ -182,7 +182,7 @@ class _OrderCardState extends State<OrderCard> {
               profilePictureUrl: clientDetails.profilePictureUrl,
               imageSize: imageSize,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,12 +192,12 @@ class _OrderCardState extends State<OrderCard> {
                   children: [
                     Text(
                       clientName,
-                      style: TextStyle(color: PartsflowColors.backgroundDark),
+                      style: const TextStyle(color: PartsflowColors.backgroundDark),
                     ),
                     SizedBox(width: 5),
                     Text(
                       "${clientDetails.phone}",
-                      style: TextStyle(color: PartsflowColors.backgroundDark),
+                      style: const TextStyle(color: PartsflowColors.backgroundDark),
                     ),
                   ],
                 ),
@@ -231,7 +231,7 @@ class _OrderCardState extends State<OrderCard> {
             borderRadius: 2,
             color: _cardBgColors[0],
             borderColor: _cardBorderColor,
-            textStyle: TextStyle(color: PartsflowColors.backgroundDark),
+            textStyle: const TextStyle(color: PartsflowColors.backgroundDark),
           ),
         ),
       ),

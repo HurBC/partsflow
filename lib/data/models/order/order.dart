@@ -429,8 +429,6 @@ class OrderDetailRespository extends OrderRepository {
       isAiMarkAsPurchase: baseOrder.isAiMarkAsPurchase,
       aiMarkAsPurchaseAt: baseOrder.aiMarkAsPurchaseAt,
       subsidiary: baseOrder.subsidiary,
-      // Para `super.client` y `super.responsible`, se utiliza el ID de los objetos detallados.
-      // Esto es consistente con KanbanOrderRepository y asegura que los campos de la base estén poblados.
       client: client?.id,
       clientCar: baseOrder.clientCar,
       responsible: responsible?.id,

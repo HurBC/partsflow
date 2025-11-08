@@ -157,7 +157,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
                         }).toList(),
                         onChanged: _handleOnKanbanOrderStatusChange,
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text("${_kanbanOrders.length} pedidos"),
                     ],
                   ),
@@ -174,9 +174,9 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
             ),
             Expanded(
               child: _isKanbanLoading
-                  ? Text("Cargando Pedidos")
+                  ? const Text("Cargando Pedidos")
                   : _kanbanOrders.isEmpty
-                  ? Text("Sin pedidos en este estado")
+                  ? const Text("Sin pedidos en este estado")
                   : ListView.builder(
                       padding: const EdgeInsets.all(8.0),
                       itemCount: _kanbanOrders.length,

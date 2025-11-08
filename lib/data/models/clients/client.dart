@@ -178,10 +178,7 @@ class ClientRepository {
         lastSellerOutboundMessageAt: json["last_seller_outbound_message_at"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        addresses: json["addresses"] == null
-            ? null
-            : List<AddressRepository>.from(
-                json["addresses"].map((x) => AddressRepository.fromJson(x))),
+        addresses: null,
         responsible: json["responsible"] == null
             ? null
             : UserRepository.fromJson(json["responsible"]),

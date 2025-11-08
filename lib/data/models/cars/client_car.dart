@@ -65,7 +65,7 @@ class ClientCarSimpleCar extends ClientCarRepository {
     required super.createdAt,
     required super.updatedAt,
     this.infoSource,
-    this.editionForSubsidiary
+    this.editionForSubsidiary,
   });
 
   factory ClientCarSimpleCar.fromJson(Map<String, dynamic> data) {
@@ -90,3 +90,48 @@ class ClientCarSimpleCar extends ClientCarRepository {
     );
   }
 }
+
+class ClientCarCarRepository extends ClientCarRepository {
+  final CarWithoutBrandRespository carDetails;
+
+  ClientCarCarRepository({
+    required this.carDetails,
+    required super.id,
+    super.plate,
+    super.vin,
+    super.motorNumber,
+    required super.country,
+    super.name,
+    super.fullName,
+    required super.createdAt,
+    required super.updatedAt,
+  }) : super(car: carDetails.id);
+
+  factory ClientCarCarRepository.fromJson(Map<String, dynamic> data) {
+    var carData = data['car'];
+
+    final carDetails = CarWithoutBrandRespository.fromJson(carData);
+
+    final baseData = Map<String, dynamic>.from(data)..remove('car');
+    final baseClientCar = ClientCarRepository.fromJson(baseData);
+
+    return ClientCarCarRepository(
+      id: baseClientCar.id,
+      plate: baseClientCar.plate,
+      vin: baseClientCar.vin,
+      motorNumber: baseClientCar.motorNumber,
+      country: baseClientCar.country,
+      name: baseClientCar.name,
+      fullName: baseClientCar.fullName,
+      createdAt: baseClientCar.createdAt,
+      updatedAt: baseClientCar.updatedAt,
+      carDetails: carDetails,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ClientCarCarRepository(id: $id, plate: $plate, vin: $vin, motorNumber: $motorNumber, country: $country, carDetails: $carDetails, name: $name, fullName: $fullName, createdAt: $createdAt, updatedAt: $updatedAt)';
+  }
+}
+
