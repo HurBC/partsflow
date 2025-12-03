@@ -188,6 +188,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
                       },
                     ),
             ),
+            
           ],
         ),
       );

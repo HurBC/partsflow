@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:go_router/go_router.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/screens/orders/kanban/widgets/kanban_orders_body.dart';
 
@@ -23,6 +25,21 @@ class KanbanOrdersScreen extends StatelessWidget {
       drawer: Drawer(backgroundColor: PartsflowColors.primary),
       backgroundColor: PartsflowColors.background,
       body: KanbanOrdersBody(),
+      floatingActionButton: SpeedDial(
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        backgroundColor: PartsflowColors.secondary,
+        foregroundColor: Colors.white,
+        children: [
+          SpeedDialChild(
+            child: const Icon(Icons.add_task),
+            label: "New Order",
+            onTap: () {
+              context.push("/orders/kanban/create/order");
+            }
+          ),
+        ],
+      ),
     );
   }
 }
