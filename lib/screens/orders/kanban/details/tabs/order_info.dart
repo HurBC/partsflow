@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:partsflow/core/colors/orders_colors.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
-import 'package:partsflow/core/components/card.dart';
+import 'package:partsflow/core/widgets/card.dart';
 import 'package:partsflow/data/models/cars/client_car.dart';
 import 'package:partsflow/data/models/order/order.dart';
 import 'package:partsflow/services/cars/supplier_car_service.dart';
@@ -18,7 +18,7 @@ class OrderDetailInfo extends StatefulWidget {
 
 class _OrderDetailInfoState extends State<OrderDetailInfo> {
   OrderDetailRespository? _orderDetail;
-  ClientCarCarRepository? _clientCarDetails;
+  ClientCarCarModel? _clientCarDetails;
   Color _categoryTagColor = PartsflowColors.primaryLight2;
   Color _categoryTagBorderColor = PartsflowColors.primaryLight2;
 
@@ -163,7 +163,7 @@ class _OrderDetailInfoState extends State<OrderDetailInfo> {
                           children: [
                             const Text("Marca"),
                             Text(
-                              "${_clientCarDetails?.carDetails.brand ?? ""}",
+                              "${_clientCarDetails?.car?.brand ?? ""}",
                             ),
                           ],
                         ),
@@ -172,7 +172,7 @@ class _OrderDetailInfoState extends State<OrderDetailInfo> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text("Modelo"),
-                            Text("${_clientCarDetails?.carDetails.model}"),
+                            Text("${_clientCarDetails?.car?.model}"),
                           ],
                         ),
                         carRowSpacer,
@@ -180,7 +180,7 @@ class _OrderDetailInfoState extends State<OrderDetailInfo> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text("Version"),
-                            Text("${_clientCarDetails?.carDetails.version}"),
+                            Text("${_clientCarDetails?.car?.version}"),
                           ],
                         ),
                         carRowSpacer,
@@ -189,7 +189,7 @@ class _OrderDetailInfoState extends State<OrderDetailInfo> {
                           children: [
                             const Text("Clindrada"),
                             Text(
-                              "${_clientCarDetails?.carDetails.displacement}",
+                              "${_clientCarDetails?.car?.displacement}",
                             ),
                           ],
                         ),
@@ -198,7 +198,7 @@ class _OrderDetailInfoState extends State<OrderDetailInfo> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text("Año"),
-                            Text("${_clientCarDetails?.carDetails.year}"),
+                            Text("${_clientCarDetails?.car?.year}"),
                           ],
                         ),
                         carRowSpacer,

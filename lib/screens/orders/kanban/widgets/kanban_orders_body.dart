@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:partsflow/core/components/sort_tag_filter.dart';
+import 'package:partsflow/core/widgets/sort_tag_filter.dart';
 import 'package:partsflow/core/constants/orders.dart';
 import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order.dart';
@@ -22,7 +22,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
   /* States */
   Timer? _timer;
 
-  List<KanbanOrderRepository> _kanbanOrders = [];
+  List<KanbanOrderModel> _kanbanOrders = [];
   late List<OrderStatusChoices> _kanbanOrdersStatus =
       OrderStatusChoicesExtension.fromKanbanStatus(kanbanStatus[0].value);
 

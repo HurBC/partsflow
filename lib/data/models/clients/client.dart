@@ -1,8 +1,10 @@
+import 'package:partsflow/data/abstract_models/client/client.dart';
+import 'package:partsflow/data/abstract_models/client/client_general_atributes.dart';
 import 'package:partsflow/data/models/clients/enums/client_enums.dart';
 import 'package:partsflow/data/models/locality/address.dart';
 import 'package:partsflow/data/models/users/user.dart';
 
-class ClientGeneralAttributesRepository {
+class ClientGeneralAttributesModel extends ClientGeneralAtributes {
   final int id;
   final String client;
   final bool hasActiveIssues;
@@ -11,7 +13,7 @@ class ClientGeneralAttributesRepository {
   final bool hasPendingCloseOrders;
   final bool hasPendingInvoice;
 
-  ClientGeneralAttributesRepository({
+  ClientGeneralAttributesModel({
     required this.id,
     required this.client,
     required this.hasActiveIssues,
@@ -21,8 +23,8 @@ class ClientGeneralAttributesRepository {
     required this.hasPendingInvoice,
   });
 
-  factory ClientGeneralAttributesRepository.fromJson(Map<String, dynamic> json) =>
-      ClientGeneralAttributesRepository(
+  factory ClientGeneralAttributesModel.fromJson(Map<String, dynamic> json) =>
+      ClientGeneralAttributesModel(
         id: json["id"],
         client: json["client"],
         hasActiveIssues: json["has_active_issues"],
@@ -43,7 +45,7 @@ class ClientGeneralAttributesRepository {
       };
 }
 
-class ClientRepository {
+class ClientModel extends Client{
   // Information
   final String id;
   final String? firstName;
@@ -81,11 +83,11 @@ class ClientRepository {
   final String updatedAt;
 
   // Relations
-  final List<AddressRepository>? addresses;
-  final UserRepository? responsible;
+  final List<AddressModel>? addresses;
+  final UserModel? responsible;
 
   // Extra
-  final ClientGeneralAttributesRepository? generalAttributes;
+  final ClientGeneralAttributesModel? generalAttributes;
 
   // AI Generate Message
   final String? lastAiGeneratedMessage;
@@ -98,7 +100,7 @@ class ClientRepository {
   final bool? isImportant;
   final bool isAgentPendingResolution;
 
-  ClientRepository({
+  ClientModel({
     required this.id,
     this.firstName,
     this.lastName,
@@ -142,8 +144,8 @@ class ClientRepository {
     required this.isAgentPendingResolution,
   });
 
-  factory ClientRepository.fromJson(Map<String, dynamic> json) =>
-      ClientRepository(
+  factory ClientModel.fromJson(Map<String, dynamic> json) =>
+      ClientModel(
         id: json["id"],
         firstName: json["first_name"],
         lastName: json["last_name"],
@@ -181,10 +183,10 @@ class ClientRepository {
         addresses: null,
         responsible: json["responsible"] == null
             ? null
-            : UserRepository.fromJson(json["responsible"]),
+            : UserModel.fromJson(json["responsible"]),
         generalAttributes: json["general_attributes"] == null
             ? null
-            : ClientGeneralAttributesRepository.fromJson(json["general_attributes"]),
+            : ClientGeneralAttributesModel.fromJson(json["general_attributes"]),
         lastAiGeneratedMessage: json["last_ai_generated_message"],
         lastAiGeneratedMessageAt: json["last_ai_generated_message_at"],
         isFromToday: json["is_from_today"],

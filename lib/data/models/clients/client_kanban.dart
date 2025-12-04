@@ -1,4 +1,4 @@
-class ClientKanbanRepository {
+class ClientKanbanModel {
   final String? id;
   final String? fullName;
   final String? profilePictureUrl;
@@ -12,7 +12,7 @@ class ClientKanbanRepository {
   final String? lastMessage;
   final String? lastMessageAt;
 
-  ClientKanbanRepository({
+  ClientKanbanModel({
     this.id,
     required this.fullName,
     required this.profilePictureUrl,
@@ -27,8 +27,8 @@ class ClientKanbanRepository {
     required this.lastMessageAt,
   });
 
-  factory ClientKanbanRepository.fromJson(Map<String, dynamic> json) =>
-      ClientKanbanRepository(
+  factory ClientKanbanModel.fromJson(Map<String, dynamic> json) =>
+      ClientKanbanModel(
         id: json["id"],
         fullName: json["full_name"],
         profilePictureUrl: json["profile_picture_url"],

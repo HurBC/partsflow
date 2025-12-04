@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
-import 'package:partsflow/core/components/card.dart';
+import 'package:partsflow/core/widgets/car/client_car_search.dart';
+import 'package:partsflow/core/widgets/card.dart';
+import 'package:partsflow/core/widgets/clients/search_client.dart';
+import 'package:partsflow/core/widgets/products/product_search.dart';
+import 'package:partsflow/data/abstract_models/client/client.dart';
 
 class CreateOrderBody extends StatefulWidget {
   const CreateOrderBody({super.key});
@@ -9,88 +13,25 @@ class CreateOrderBody extends StatefulWidget {
   State<CreateOrderBody> createState() => _CreateOrderBodyState();
 }
 
-const CLIENT_LIST = [
-  (id: 1, name: 'Cliente A'),
-  (id: 2, name: 'Cliente B'),
-  (id: 3, name: 'Cliente C'),
-  (id: 4, name: 'Cliente D'),
-];
-
 class _CreateOrderBodyState extends State<CreateOrderBody> {
+  Client? _selectedClient;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        spacing: 12.0,
         children: [
-          RCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Vehiculo del pedido",
-                  style: TextStyle(
-                    color: PartsflowColors.backgroundDark,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: "Ingrese el patente del vehículo",
-                  ),
-                ),
-              ],
-            ),
+          SearchClient(
+            onClientSelected: (selectedClient) {
+              setState(() {
+                _selectedClient = selectedClient;
+              });
+            },
           ),
-          RCard(
-            borderRadius: 5.0,
-            cardBgColor: PartsflowColors.background,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Cliente",
-                  style: TextStyle(
-                    color: PartsflowColors.backgroundDark,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                DropdownButton(
-                  hint: Text("Seleccione un cliente"),
-                  items: CLIENT_LIST.map((client) {
-                    return DropdownMenuItem<int>(
-                      value: client.id,
-                      child: Text(client.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    debugPrint("Cliente seleccionado: $value");
-                  },
-                ),
-              ],
-            ),
-          ),
-          RCard(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Productos",
-                  style: TextStyle(
-                    color: PartsflowColors.backgroundDark,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                // Aquí puedes agregar la lógica para seleccionar productos
-              ],
-            ),
-          ),
+          ClientCarSearch(),
+          ProductSearch(),
         ],
       ),
     );

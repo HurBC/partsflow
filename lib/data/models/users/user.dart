@@ -1,4 +1,6 @@
-class UserRepository {
+import 'package:partsflow/data/abstract_models/user/user.dart';
+
+class UserModel extends User {
   final String id;
   final String? cognitoId;
   final String firstName;
@@ -12,7 +14,7 @@ class UserRepository {
   final DateTime? updatedAt;
   final bool? isAdmin;
 
-  UserRepository({
+  UserModel({
     required this.id,
     this.cognitoId,
     required this.firstName,
@@ -28,8 +30,8 @@ class UserRepository {
   });
 
   // fromJson
-  factory UserRepository.fromJson(Map<String, dynamic> json) {
-    return UserRepository(
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
       id: json['id'] as String,
       cognitoId: json['cognito_id'] as String?,
       firstName: json['first_name'] as String,

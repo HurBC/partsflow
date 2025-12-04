@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import "package:http/http.dart" as http;
-import 'package:partsflow/core/components/sort_tag_filter.dart';
+import 'package:partsflow/core/widgets/sort_tag_filter.dart';
 import 'package:partsflow/core/globals/env.dart';
 import 'package:partsflow/core/globals/globals.dart';
 import 'package:partsflow/data/models/order/order.dart';
@@ -18,7 +18,7 @@ class _Configs {
 }
 
 class KanbanService {
-  static Future<List<KanbanOrderRepository>> getKanbanOrders(
+  static Future<List<KanbanOrderModel>> getKanbanOrders(
     ListOrders params,
   ) async {
     final queryParams = StringBuffer("");
@@ -79,10 +79,10 @@ class KanbanService {
 
     var decodedBody = jsonDecode(response.body);
 
-    List<KanbanOrderRepository> orders = List.empty(growable: true);
+    List<KanbanOrderModel> orders = List.empty(growable: true);
 
     for (var decodedOrder in decodedBody["results"] as List) {
-      KanbanOrderRepository order = KanbanOrderRepository.fromJson(
+      KanbanOrderModel order = KanbanOrderModel.fromJson(
         decodedOrder,
       );
 

@@ -1,6 +1,9 @@
+import 'package:partsflow/data/abstract_models/cars/car.dart';
+import 'package:partsflow/data/abstract_models/cars/client_car.dart';
+import 'package:partsflow/data/models/cars/brand.dart';
 import 'package:partsflow/data/models/cars/car.dart';
 
-class ClientCarRepository {
+class ClientCarModel extends ClientCar<int> {
   final int id;
   final String? plate;
   final String? vin;
@@ -12,7 +15,7 @@ class ClientCarRepository {
   final String createdAt;
   final String updatedAt;
 
-  ClientCarRepository({
+  ClientCarModel({
     required this.id,
     this.plate,
     this.vin,
@@ -27,11 +30,11 @@ class ClientCarRepository {
 
   @override
   String toString() {
-    return 'ClientCarRepository(id: $id, plate: $plate, vin: $vin, motorNumber: $motorNumber, country: $country, car: $car, name: $name, fullName: $fullName, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ClientCarModel(id: $id, plate: $plate, vin: $vin, motorNumber: $motorNumber, country: $country, car: $car, name: $name, fullName: $fullName, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
-  factory ClientCarRepository.fromJson(Map<String, dynamic> data) {
-    return ClientCarRepository(
+  factory ClientCarModel.fromJson(Map<String, dynamic> data) {
+    return ClientCarModel(
       id: data['id'] as int,
       plate: data['plate'] as String?,
       vin: data['vin'] as String?,
@@ -46,8 +49,8 @@ class ClientCarRepository {
   }
 }
 
-class ClientCarSimpleCar extends ClientCarRepository {
-  final CarRespository? carDetails;
+class ClientCarSimpleCar extends ClientCarModel {
+  final Car? carDetails;
 
   final String? infoSource;
   final String? editionForSubsidiary;
@@ -69,11 +72,11 @@ class ClientCarSimpleCar extends ClientCarRepository {
   });
 
   factory ClientCarSimpleCar.fromJson(Map<String, dynamic> data) {
-    final carDetails = CarRespository.fromJson(data['car']);
+    final carDetails = CarModel.fromJson(data['car']);
 
     data.remove("car");
 
-    final baseClientCar = ClientCarRepository.fromJson(data);
+    final baseClientCar = ClientCarModel.fromJson(data);
 
     return ClientCarSimpleCar(
       id: baseClientCar.id,
@@ -91,47 +94,56 @@ class ClientCarSimpleCar extends ClientCarRepository {
   }
 }
 
-class ClientCarCarRepository extends ClientCarRepository {
-  final CarWithoutBrandRespository carDetails;
+class ClientCarCarModel extends ClientCar<Car<int>> {
+  final int id;
+  final String? plate;
+  final String? vin;
+  final String? motorNumber;
+  final String country;
+  final Car<int>? car;
+  final String? name;
+  final String? fullName;
+  final String createdAt;
+  final String updatedAt;
 
-  ClientCarCarRepository({
-    required this.carDetails,
-    required super.id,
-    super.plate,
-    super.vin,
-    super.motorNumber,
-    required super.country,
-    super.name,
-    super.fullName,
-    required super.createdAt,
-    required super.updatedAt,
-  }) : super(car: carDetails.id);
+  ClientCarCarModel({
+    required this.id,
+    this.plate,
+    this.vin,
+    this.motorNumber,
+    required this.country,
+    this.name,
+    this.fullName,
+    this.car,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  factory ClientCarCarRepository.fromJson(Map<String, dynamic> data) {
-    var carData = data['car'];
+  factory ClientCarCarModel.fromJson(Map<String, dynamic> data) {
+    Car<int>? car;
+    var carData = data["car"];
 
-    final carDetails = CarWithoutBrandRespository.fromJson(carData);
+    if (carData != null) {
+      car = CarModel<int>.fromJson(carData);
+    }
 
-    final baseData = Map<String, dynamic>.from(data)..remove('car');
-    final baseClientCar = ClientCarRepository.fromJson(baseData);
-
-    return ClientCarCarRepository(
-      id: baseClientCar.id,
-      plate: baseClientCar.plate,
-      vin: baseClientCar.vin,
-      motorNumber: baseClientCar.motorNumber,
-      country: baseClientCar.country,
-      name: baseClientCar.name,
-      fullName: baseClientCar.fullName,
-      createdAt: baseClientCar.createdAt,
-      updatedAt: baseClientCar.updatedAt,
-      carDetails: carDetails,
+    return ClientCarCarModel(
+      id: data["id"],
+      plate: data["plate"],
+      vin: data["vin"],
+      motorNumber: data["motor_number"],
+      country: data["country"],
+      name: data["name"],
+      car: car,
+      fullName: data["ful_name"],
+      createdAt: data["created_at"],
+      updatedAt: data["updated_at"],
     );
   }
 
   @override
   String toString() {
-    return 'ClientCarCarRepository(id: $id, plate: $plate, vin: $vin, motorNumber: $motorNumber, country: $country, carDetails: $carDetails, name: $name, fullName: $fullName, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ClientCarCarModel(id: $id, plate: $plate, vin: $vin, motorNumber: $motorNumber, country: $country, carDetails: ${car.toString()}, name: $name, fullName: $fullName, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }
 

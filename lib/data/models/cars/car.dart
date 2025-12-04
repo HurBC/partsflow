@@ -1,3 +1,5 @@
+import 'package:partsflow/data/abstract_models/cars/brand.dart';
+import 'package:partsflow/data/abstract_models/cars/car.dart';
 import 'package:partsflow/data/models/cars/brand.dart';
 
 class SimpleCar {
@@ -10,7 +12,7 @@ class SimpleCar {
       SimpleCar(id: json["id"] as int, name: json["name"] as String?);
 }
 
-class CarRespository {
+class CarModel<BrandType> extends Car<BrandType> {
   final int id;
   final String model;
   final String? version;
@@ -20,8 +22,9 @@ class CarRespository {
   final String? originCountry;
   final String? originalModel;
   final int year;
+  final BrandType? brand;
 
-  CarRespository({
+  CarModel({
     required this.id,
     required this.model,
     this.version,
@@ -31,92 +34,36 @@ class CarRespository {
     this.originCountry,
     this.originalModel,
     required this.year,
+    this.brand
   });
 
-  factory CarRespository.fromJson(Map<String, dynamic> json) {
+  factory CarModel.fromJson(Map<String, dynamic> json) {
+    final rawBrandData = json["brand"];
 
-    return CarRespository(
+    BrandType? parsedBrand;
+
+    if (BrandType == int) {
+      if (BrandType is int) {
+        parsedBrand = rawBrandData as BrandType;
+      } else if (BrandType is Map) {
+        parsedBrand = rawBrandData["id"] as BrandType;
+      }
+    } else if (BrandType == Brand) {
+      parsedBrand = BrandModel.fromJson(rawBrandData) as BrandType;
+    }
+
+
+    return CarModel(
       id: json["id"],
       model: json["model"],
       version: json["version"],
       displacement: json["displacement"],
       manufacturer: json["manufacturer"],
-      firstMotorNumbers: json["firstMotorNumbers"],
-      originCountry: json["originCountry"],
-      originalModel: json["originalModel"],
+      firstMotorNumbers: json["first_motor_numbers"],
+      originCountry: json["origin_country"],
+      originalModel: json["original_model"],
       year: json["year"],
-    );
-  }
-}
-
-class CarWithoutBrandRespository extends CarRespository {
-  final int? brand;
-
-  CarWithoutBrandRespository({
-    required this.brand,
-    required super.id,
-    required super.model,
-    super.version,
-    super.displacement,
-    super.manufacturer,
-    super.firstMotorNumbers,
-    super.originCountry,
-    super.originalModel,
-    required super.year,
-  });
-
-  factory CarWithoutBrandRespository.fromJson(Map<String, dynamic> json) {
-    CarRespository baseCar = CarRespository.fromJson(json);
-
-    return CarWithoutBrandRespository(
-      id: baseCar.id,
-      brand: json["brand"],
-      model: baseCar.model,
-      version: baseCar.version,
-      displacement: baseCar.displacement,
-      manufacturer: baseCar.manufacturer,
-      firstMotorNumbers: baseCar.firstMotorNumbers,
-      originCountry: baseCar.originCountry,
-      originalModel: baseCar.originalModel,
-      year: baseCar.year,
-    );
-  }
-}
-
-class CarWithBrandRespository extends CarRespository {
-  final Brand brand;
-
-  CarWithBrandRespository({
-    required this.brand,
-    required super.id,
-    required super.model,
-    super.version,
-    super.displacement,
-    super.manufacturer,
-    super.firstMotorNumbers,
-    super.originCountry,
-    super.originalModel,
-    required super.year,
-  });
-
-  factory CarWithBrandRespository.fromJson(Map<String, dynamic> json) {
-    var brand = Brand.fromJson(json["brand"]);
-
-    json.remove("brand");
-
-    CarRespository baseCar = CarRespository.fromJson(json);
-
-    return CarWithBrandRespository(
-      id: baseCar.id,
-      brand: brand,
-      model: baseCar.model,
-      version: baseCar.version,
-      displacement: baseCar.displacement,
-      manufacturer: baseCar.manufacturer,
-      firstMotorNumbers: baseCar.firstMotorNumbers,
-      originCountry: baseCar.originCountry,
-      originalModel: baseCar.originalModel,
-      year: baseCar.year,
+      brand: parsedBrand
     );
   }
 }

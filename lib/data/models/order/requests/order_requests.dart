@@ -1,4 +1,4 @@
-import 'package:partsflow/core/components/sort_tag_filter.dart';
+import 'package:partsflow/core/widgets/sort_tag_filter.dart';
 import 'package:partsflow/core/network/query_params.dart';
 import 'package:partsflow/data/models/order/enums/order_enums.dart';
 

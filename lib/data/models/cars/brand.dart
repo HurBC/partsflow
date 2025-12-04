@@ -1,23 +1,28 @@
-class Brand {
+import 'package:partsflow/data/abstract_models/cars/brand.dart';
+
+class BrandModel extends Brand {
   final int id;
   final String name;
   final String country;
-  final String? createdAt;
-  final String? updatedAt;
+  bool? isLightVehicle;
+  String? createdAt;
+  String? updatedAt;
 
-  Brand({
+  BrandModel({
     required this.id,
     required this.name,
     required this.country,
-    required this.createdAt,
-    required this.updatedAt,
+    required this.isLightVehicle,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  factory Brand.fromJson(Map<String, dynamic> json) => Brand(
+  factory BrandModel.fromJson(Map<String, dynamic> json) => BrandModel(
     id: json["id"],
     name: json["name"],
     country: json["country"],
-    createdAt: json["createdAt"],
-    updatedAt: json["updatedAt"],
+    isLightVehicle: json["is_light_vehicle"],
+    createdAt: json["created_at"],
+    updatedAt: json["updated_at"],
   );
 }

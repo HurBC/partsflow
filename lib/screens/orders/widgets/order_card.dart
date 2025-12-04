@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:partsflow/core/colors/orders_colors.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
-import 'package:partsflow/core/components/client_image.dart';
-import 'package:partsflow/core/components/tag.dart';
+import 'package:partsflow/core/widgets/clients/client_image.dart';
+import 'package:partsflow/core/widgets/tag.dart';
 import 'package:partsflow/core/utils/time_utils.dart';
 import 'package:partsflow/data/models/clients/client_kanban.dart';
 import 'package:partsflow/data/models/order/order.dart';
 import 'package:partsflow/data/models/order/order_product_quantity.dart';
 
 class OrderCard extends StatefulWidget {
-  final KanbanOrderRepository order;
+  final KanbanOrderModel order;
 
   const OrderCard({super.key, required this.order});
 
@@ -21,7 +21,7 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
-  late KanbanOrderRepository _order;
+  late KanbanOrderModel _order;
   late List<Color> _cardBgColors = [
     PartsflowColors.primaryLight2,
     PartsflowColors.primaryLight2,
@@ -160,7 +160,7 @@ class _OrderCardState extends State<OrderCard> {
 
   Container clientDetails(
     double imageSize,
-    ClientKanbanRepository clientDetails,
+    ClientKanbanModel clientDetails,
   ) {
     final fullName = clientDetails.fullName;
     final clientName = fullName != null
@@ -218,7 +218,7 @@ class _OrderCardState extends State<OrderCard> {
     );
   }
 
-  SizedBox getOpqsList(List<OrderProductQuantityRepository> opqs) {
+  SizedBox getOpqsList(List<OrderProductQuantityModel> opqs) {
     return SizedBox(
       height: 30,
       child: ListView.builder(

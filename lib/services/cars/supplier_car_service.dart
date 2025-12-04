@@ -17,9 +17,11 @@ class _Configs {
 }
 
 extension SupplierCarService on CarService {
-  static Future<ClientCarCarRepository> getClientCar({
+  static Future<ClientCarCarModel> getClientCar({
     required int clientCarId
   }) async {
+    debugPrint("GETTING CLIENT CAR INFO");
+
     final uri = Uri.parse("${_Configs.apiUrl}/$clientCarId");
 
     final response = await http.get(uri, headers: _Configs.headers);
@@ -35,7 +37,9 @@ extension SupplierCarService on CarService {
 
     var decodedBody = jsonDecode(response.body);
 
-    ClientCarCarRepository clientCar = ClientCarCarRepository.fromJson(decodedBody);
+    debugPrint("DECODED BODY: $decodedBody");
+
+    ClientCarCarModel clientCar = ClientCarCarModel.fromJson(decodedBody);
 
     return clientCar;
   }

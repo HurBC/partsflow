@@ -5,7 +5,7 @@ import 'package:partsflow/data/models/order/enums/order_enums.dart';
 import 'package:partsflow/data/models/order/order_product_quantity.dart';
 import 'package:partsflow/data/models/users/user.dart';
 
-class OrderRepository {
+class OrderModel {
   final int id;
   final String? name;
   final OrderSourceChoices? source;
@@ -54,7 +54,7 @@ class OrderRepository {
   final String createdAt;
   final String updatedAt;
 
-  OrderRepository({
+  OrderModel({
     required this.id,
     required this.name,
     this.source,
@@ -104,8 +104,8 @@ class OrderRepository {
     required this.updatedAt,
   });
 
-  factory OrderRepository.fromJson(Map<String, dynamic> json) {
-    return OrderRepository(
+  factory OrderModel.fromJson(Map<String, dynamic> json) {
+    return OrderModel(
       id: json['id'] as int,
       name: json['name'] as String?,
       source: OrderSourceChoicesExtension.fromJson(json['source']),
@@ -192,13 +192,13 @@ class OrderRepository {
   }
 }
 
-class KanbanOrderRepository extends OrderRepository {
-  final ClientKanbanRepository? clientDetails;
+class KanbanOrderModel extends OrderModel {
+  final ClientKanbanModel? clientDetails;
   final ClientCarSimpleCar? clientCarDetails;
-  final List<OrderProductQuantityRepository> opqs;
-  final UserRepository? responsibleData;
+  final List<OrderProductQuantityModel> opqs;
+  final UserModel? responsibleData;
 
-  KanbanOrderRepository({
+  KanbanOrderModel({
     required super.id,
     required super.name,
     required super.source,
@@ -252,23 +252,23 @@ class KanbanOrderRepository extends OrderRepository {
     this.responsibleData,
   });
 
-  factory KanbanOrderRepository.fromJson(Map<String, dynamic> json) {
-    var decodedOpqs = List<OrderProductQuantityRepository>.empty(
+  factory KanbanOrderModel.fromJson(Map<String, dynamic> json) {
+    var decodedOpqs = List<OrderProductQuantityModel>.empty(
       growable: true,
     );
 
     for (var opq in json["opqs"] as List) {
-      var decodedOpq = OrderProductQuantityRepository.fromJson(opq);
+      var decodedOpq = OrderProductQuantityModel.fromJson(opq);
 
       decodedOpqs.add(decodedOpq);
     }
 
-    UserRepository? responsible =
+    UserModel? responsible =
         json.containsKey("responsible") && json["responsible"] != null
-        ? UserRepository.fromJson(json["responsible"])
+        ? UserModel.fromJson(json["responsible"])
         : null;
 
-    ClientKanbanRepository client = ClientKanbanRepository.fromJson(
+    ClientKanbanModel client = ClientKanbanModel.fromJson(
       json['client'],
     );
 
@@ -281,9 +281,9 @@ class KanbanOrderRepository extends OrderRepository {
     json.remove("client");
     json.remove("client_car");
 
-    final baseOrder = OrderRepository.fromJson(json);
+    final baseOrder = OrderModel.fromJson(json);
 
-    return KanbanOrderRepository(
+    return KanbanOrderModel(
       id: baseOrder.id,
       name: baseOrder.name,
       source: baseOrder.source,
@@ -340,9 +340,9 @@ class KanbanOrderRepository extends OrderRepository {
   }
 }
 
-class OrderDetailRespository extends OrderRepository {
-  final ClientRepository? clientDetails;
-  final UserRepository? responsibleDetails;
+class OrderDetailRespository extends OrderModel {
+  final ClientModel? clientDetails;
+  final UserModel? responsibleDetails;
 
   OrderDetailRespository({
     required super.id,
@@ -396,16 +396,16 @@ class OrderDetailRespository extends OrderRepository {
   });
 
   factory OrderDetailRespository.fromJson(Map<String, dynamic> json) {
-    ClientRepository? client = json.containsKey("client") && json["client"] != null ?
-    ClientRepository.fromJson(json["client"]) : null;
+    ClientModel? client = json.containsKey("client") && json["client"] != null ?
+    ClientModel.fromJson(json["client"]) : null;
 
-    UserRepository? responsible = json.containsKey("responsible") && json["responsible"] != null ?
-    UserRepository.fromJson(json["responsible"]) : null;
+    UserModel? responsible = json.containsKey("responsible") && json["responsible"] != null ?
+    UserModel.fromJson(json["responsible"]) : null;
 
     json.remove("client");
     json.remove("responsible");
 
-    final baseOrder = OrderRepository.fromJson(json);
+    final baseOrder = OrderModel.fromJson(json);
 
     return OrderDetailRespository(
       id: baseOrder.id,
