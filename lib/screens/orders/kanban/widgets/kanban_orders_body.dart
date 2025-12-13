@@ -44,7 +44,7 @@ class KanbanOrdersBodyState extends State<KanbanOrdersBody> {
     super.initState();
 
     _timer?.cancel();
-    loadAllOrders();
+    loadAllOrders(immediateLoad: true);
   }
 
   @override
@@ -71,16 +71,27 @@ class KanbanOrdersBodyState extends State<KanbanOrdersBody> {
         sortBy: _createdAtSortType,
       );
 
-      final data = await KanbanService.getKanbanOrders(
-        params,
-        client: widget.httpClient,
-      );
+      try {
+        final data = await KanbanService.getKanbanOrders(
+          params,
+          client: widget.httpClient,
+        );
 
-      setState(() {
-        _kanbanOrders = data;
-        _isKanbanLoading = false;
-      });
+        if (!mounted) return;
+
+        setState(() {
+          _kanbanOrders = data;
+          _isKanbanLoading = false;
+        });
+      } catch (e) {
+        if (!mounted) return;
+        setState(() {
+          _isKanbanLoading = false;
+        });
+      }
     }
+
+    if (!mounted) return;
 
     // Create the timer
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
@@ -97,9 +108,11 @@ class KanbanOrdersBodyState extends State<KanbanOrdersBody> {
         client: widget.httpClient,
       );
 
-      setState(() {
-        _kanbanOrders = data;
-      });
+      if (mounted) {
+        setState(() {
+          _kanbanOrders = data;
+        });
+      }
     });
   }
 

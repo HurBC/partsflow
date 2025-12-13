@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:go_router/go_router.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/screens/orders/kanban/widgets/kanban_orders_body.dart';
+import 'package:partsflow/services/user_service.dart';
 
 class KanbanOrdersScreen extends StatefulWidget {
   const KanbanOrdersScreen({super.key});
@@ -29,7 +30,34 @@ class _KanbanOrdersScreenState extends State<KanbanOrdersScreen> {
         backgroundColor: PartsflowColors.primary,
         title: Image.asset("assets/images/logo_partsflow_white.png"),
       ),
-      drawer: Drawer(backgroundColor: PartsflowColors.primary),
+      drawer: Drawer(
+        backgroundColor: PartsflowColors.primary,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: PartsflowColors.primary),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Image.asset("assets/images/logo_partsflow_white.png"),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.white),
+              title: const Text(
+                'Cerrar Sesión',
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () async {
+                await AuthService.logout();
+                if (context.mounted) {
+                  context.go('/login');
+                }
+              },
+            ),
+          ],
+        ),
+      ),
       backgroundColor: PartsflowColors.background,
       body: KanbanOrdersBody(key: _bodyKey),
       floatingActionButton: SpeedDial(

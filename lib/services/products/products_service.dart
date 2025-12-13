@@ -18,19 +18,24 @@ class _Configs {
 }
 
 class ProductsService {
-  static Future<ListApiResponse<SimpleProduct>> searchProduct(SearchProducts params) async {
+  static http.Client? _mockClient;
+  static set mockClient(http.Client? client) => _mockClient = client;
+
+  static Future<ListApiResponse<SimpleProduct>> searchProduct(
+    SearchProducts params, {
+    http.Client? client,
+  }) async {
     debugPrint("==== Buscando productos con params: ${params.toMap()} ===");
 
     final uri = Uri.parse("${_Configs.apiUrl}/search").replace(
       queryParameters: params.toMap().map(
-            (key, value) => MapEntry(key, value.toString()),
-          ),
+        (key, value) => MapEntry(key, value.toString()),
+      ),
     );
 
-    final response = await http.get(
-      uri,
-      headers: _Configs.headers,
-    );
+    var httpClient = client ?? _mockClient ?? http.Client();
+
+    final response = await httpClient.get(uri, headers: _Configs.headers);
 
     if (response.statusCode != 200) {
       if (params.query.isEmpty) {
@@ -46,7 +51,7 @@ class ProductsService {
 
     ListApiResponse<SimpleProduct> products = ListApiResponse.fromJson(
       decodedBody,
-          (item) => SimpleProductModel.fromJson(item),
+      (item) => SimpleProductModel.fromJson(item),
     );
 
     return products;

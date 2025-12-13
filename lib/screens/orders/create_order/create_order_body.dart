@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:partsflow/core/colors/partsflow_colors.dart';
 import 'package:partsflow/core/widgets/car/client_car_search.dart';
-import 'package:partsflow/core/widgets/card.dart';
 import 'package:partsflow/core/widgets/clients/search_client.dart';
 import 'package:partsflow/core/widgets/products/product_search.dart';
 import 'package:partsflow/data/abstract_models/cars/car.dart';

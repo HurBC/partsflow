@@ -19,12 +19,15 @@ class _Configs {
 }
 
 class OrdersService {
+  static http.Client? _mockClient;
+  static set mockClient(http.Client? client) => _mockClient = client;
+
   static Future<OrderDetailRespository> getOrder({
     required int orderId,
     http.Client? client,
   }) async {
     final uri = Uri.parse("${_Configs.apiUrl}/$orderId");
-    var httpClient = client ?? http.Client();
+    var httpClient = client ?? _mockClient ?? http.Client();
 
     final response = await httpClient.get(uri, headers: _Configs.headers);
 

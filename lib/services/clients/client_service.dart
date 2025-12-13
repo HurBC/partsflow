@@ -18,19 +18,24 @@ class _Configs {
 }
 
 class ClientService {
-  static Future<ListApiResponse<Client>> searchClients(SearchClientParams params) async {
+  static http.Client? _mockClient;
+  static set mockClient(http.Client? client) => _mockClient = client;
+
+  static Future<ListApiResponse<Client>> searchClients(
+    SearchClientParams params, {
+    http.Client? client,
+  }) async {
     debugPrint("==== Buscando clientes con params: ${params.toMap()} ===");
 
     final uri = Uri.parse(_Configs.apiUrl).replace(
       queryParameters: params.toMap().map(
-            (key, value) => MapEntry(key, value.toString()),
-          ),
+        (key, value) => MapEntry(key, value.toString()),
+      ),
     );
 
-    final response = await http.get(
-      uri,
-      headers: _Configs.headers,
-    );
+    var httpClient = client ?? _mockClient ?? http.Client();
+
+    final response = await httpClient.get(uri, headers: _Configs.headers);
 
     if (response.statusCode != 200) {
       throw Exception(
@@ -42,7 +47,7 @@ class ClientService {
 
     ListApiResponse<Client> clients = ListApiResponse.fromJson(
       decodedBody,
-          (item) => ClientModel.fromJson(item),
+      (item) => ClientModel.fromJson(item),
     );
 
     return clients;

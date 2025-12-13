@@ -18,13 +18,16 @@ class _Configs {
 }
 
 class KanbanService {
+  static http.Client? _mockClient;
+  static set mockClient(http.Client? client) => _mockClient = client;
+
   static Future<List<KanbanOrderModel>> getKanbanOrders(
     ListOrders params, {
     http.Client? client,
   }) async {
     final queryParams = StringBuffer("");
     final mapParams = params.toMap();
-    var httpClient = client ?? http.Client();
+    var httpClient = client ?? _mockClient ?? http.Client();
 
     for (var element in mapParams.entries) {
       String key = element.key;

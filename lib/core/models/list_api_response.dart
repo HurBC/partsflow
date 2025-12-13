@@ -1,4 +1,3 @@
-import 'package:partsflow/core/models/json.dart';
 
 class ListApiResponse<Data> {
   int count;

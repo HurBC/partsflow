@@ -13,15 +13,25 @@ class SimpleCar {
 }
 
 class CarModel<BrandType> extends Car<BrandType> {
+  @override
   final int id;
+  @override
   final String model;
+  @override
   final String? version;
+  @override
   final String? displacement;
+  @override
   final String? manufacturer;
+  @override
   final String? firstMotorNumbers;
+  @override
   final String? originCountry;
+  @override
   final String? originalModel;
+  @override
   final int year;
+  @override
   final BrandType? brand;
 
   CarModel({

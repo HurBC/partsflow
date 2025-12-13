@@ -5,12 +5,19 @@ import 'package:partsflow/data/models/locality/address.dart';
 import 'package:partsflow/data/models/users/user.dart';
 
 class ClientGeneralAttributesModel extends ClientGeneralAtributes {
+  @override
   final int id;
+  @override
   final String client;
+  @override
   final bool hasActiveIssues;
+  @override
   final bool hasActiveQuotationOrders;
+  @override
   final bool hasManualAssistanceTrigger;
+  @override
   final bool hasPendingCloseOrders;
+  @override
   final bool hasPendingInvoice;
 
   ClientGeneralAttributesModel({
@@ -47,57 +54,98 @@ class ClientGeneralAttributesModel extends ClientGeneralAtributes {
 
 class ClientModel extends Client{
   // Information
+  @override
   final String id;
+  @override
   final String? firstName;
+  @override
   final String? lastName;
+  @override
   final String? fullName;
+  @override
   final String? run;
+  @override
   final String? name;
+  @override
   final String? email;
+  @override
   final String? phone;
+  @override
   final bool isNew;
+  @override
   final bool isActive;
+  @override
   final bool isChatHiddenFromAdmin;
+  @override
   final bool isChatResolved;
+  @override
   final bool isLastMessageInbound;
+  @override
   final bool isLastOutboundMessageAi;
+  @override
   final int unreadMessageCount;
+  @override
   final String? lastMessage;
+  @override
   final ClientLeadGenerationChannel? leadGenerationChannel;
+  @override
   final String? profilePictureUrl;
+  @override
   final bool isQuoteAgentActive;
+  @override
   final bool isOrderTakerAgentRestricted;
 
+  @override
   final ClientOperationModeEnum operationMode;
+  @override
   final ClientOriginChoices origin;
+  @override
   final ClientStatusChoices? status;
+  @override
   final ClientImportanceLevel importanceLevel;
 
   // Dates
+  @override
   final String? chatResolvedAt;
+  @override
   final String? lastMessageAt;
+  @override
   final String? lastAiActiveModeAt;
+  @override
   final String? lastManualActiveModeAt;
+  @override
   final String? lastSellerOutboundMessageAt;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
 
   // Relations
+  @override
   final List<AddressModel>? addresses;
+  @override
   final UserModel? responsible;
 
   // Extra
+  @override
   final ClientGeneralAttributesModel? generalAttributes;
 
   // AI Generate Message
+  @override
   final String? lastAiGeneratedMessage;
+  @override
   final String? lastAiGeneratedMessageAt;
 
   // Computed (no necesariamente vienen en la API, pero útiles)
+  @override
   final bool? isFromToday;
+  @override
   final bool? isAiActive;
+  @override
   final bool? isRecent;
+  @override
   final bool? isImportant;
+  @override
   final bool isAgentPendingResolution;
 
   ClientModel({

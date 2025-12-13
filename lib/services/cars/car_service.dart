@@ -19,9 +19,13 @@ class _Configs {
 }
 
 class CarService {
+  static http.Client? _mockClient;
+  static set mockClient(http.Client? client) => _mockClient = client;
+
   static Future<ListApiResponse<ClientCar<Car<int>>>> searcClientCar(
-    SearcClientCarParams params,
-  ) async {
+    SearcClientCarParams params, {
+    http.Client? client,
+  }) async {
     debugPrint("==== Buscando vehiculos con params: ${params.toMap()} ===");
 
     final uri = Uri.parse("${_Configs.apiUrl}/search/").replace(
@@ -30,7 +34,9 @@ class CarService {
       ),
     );
 
-    final response = await http.get(uri, headers: _Configs.headers);
+    var httpClient = client ?? _mockClient ?? http.Client();
+
+    final response = await httpClient.get(uri, headers: _Configs.headers);
 
     if (response.statusCode != 200) {
       throw Exception(

@@ -15,6 +15,7 @@ dependencies:
   go_router: ^14.2.0
   flutter_speed_dial: ^7.0.0
   dropdown_search: ^6.0.2
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   flutter_test:

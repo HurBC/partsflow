@@ -1,11 +1,17 @@
 import 'package:partsflow/data/abstract_models/cars/brand.dart';
 
 class BrandModel extends Brand {
+  @override
   final int id;
+  @override
   final String name;
+  @override
   final String country;
+  @override
   bool? isLightVehicle;
+  @override
   String? createdAt;
+  @override
   String? updatedAt;
 
   BrandModel({

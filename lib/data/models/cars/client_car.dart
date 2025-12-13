@@ -4,15 +4,25 @@ import 'package:partsflow/data/models/cars/brand.dart';
 import 'package:partsflow/data/models/cars/car.dart';
 
 class ClientCarModel extends ClientCar<int> {
+  @override
   final int id;
+  @override
   final String? plate;
+  @override
   final String? vin;
+  @override
   final String? motorNumber;
+  @override
   final String country;
+  @override
   final int? car;
+  @override
   final String? name;
+  @override
   final String? fullName;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
 
   ClientCarModel({
@@ -95,15 +105,25 @@ class ClientCarSimpleCar extends ClientCarModel {
 }
 
 class ClientCarCarModel extends ClientCar<Car<int>> {
+  @override
   final int id;
+  @override
   final String? plate;
+  @override
   final String? vin;
+  @override
   final String? motorNumber;
+  @override
   final String country;
+  @override
   final Car<int>? car;
+  @override
   final String? name;
+  @override
   final String? fullName;
+  @override
   final String createdAt;
+  @override
   final String updatedAt;
 
   ClientCarCarModel({

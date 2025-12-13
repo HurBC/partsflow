@@ -37,7 +37,10 @@ void main() {
     await tester.pumpWidget(const MaterialApp(home: LoginScreen()));
 
     // Enter email
-    await tester.enterText(find.byType(TextField).at(0), 'test@example.com');
+    await tester.enterText(
+      find.byType(TextField).at(0),
+      'fcobreque1204@gmail.com',
+    );
 
     // Tap login button
     await tester.tap(find.byType(ElevatedButton));

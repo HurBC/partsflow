@@ -1,208 +1,166 @@
-# Partsflow - Automotive Parts Order Management System
+# Partsflow 🛠️🚗
+**Sistema de Gestión de Pedidos de Autopartes**
 
-## 1. Descripción General del Proyecto
+![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?style=for-the-badge&logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?style=for-the-badge&logo=dart)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Layered-green?style=for-the-badge)
+![Testing](https://img.shields.io/badge/Testing-Unit%20%26%20Widget-orange?style=for-the-badge)
 
-Partsflow es una aplicación móvil diseñada para optimizar la gestión de pedidos de autopartes a través de un flujo de trabajo estilo Kanban. La aplicación aborda el desafío de coordinar la ejecución de pedidos, la comunicación con el cliente y el seguimiento del inventario para proveedores de autopartes. Esta interfaz móvil funcional, desarrollada en Flutter, permite a los usuarios ver y filtrar pedidos por estado, monitorear información detallada de pedidos incluyendo datos del cliente y especificaciones del vehículo, y rastrear el ciclo de vida completo del pedido con actualizaciones en tiempo real.
+## 📖 Descripción General
 
-## 2. Aprendizajes Clave y Requisitos Demostrados
+**Partsflow** es una aplicación móvil robusta desarrollada en Flutter, diseñada para revolucionar la gestión logística de proveedores de autopartes. La aplicación implementa una metodología **Kanban** para visualizar y administrar el ciclo de vida de los pedidos, desde su creación hasta su entrega, facilitando la toma de decisiones rápida y eficiente.
 
-### Diseño Visual
-*   **Interfaz Estructurada:** Implementa diseños basados en tarjetas con una clara jerarquía visual utilizando categorías codificadas por colores (oro, plata, bronce, papelera).
-*   **Navegación:** Enrutamiento declarativo usando `go_router` con tres rutas principales: inicio de sesión, pedidos Kanban y detalles del pedido.
-*   **Principios de Usabilidad:** Filtros desplegables, etiquetas de clasificación y visualización intuitiva de pedidos basada en tarjetas.
-*   **Material Design:** Utiliza componentes de Material (Scaffold, AppBar, TextField, ElevatedButton).
-*   ⚠️ **Nota:** El tema de Material 3 no está configurado explícitamente.
+El objetivo principal es eliminar la fricción en el seguimiento de pedidos, proporcionando una interfaz limpia, actualizaciones en tiempo real y una experiencia de usuario fluida y segura.
 
-### Formularios y Validación
-*   **Implementación Actual:** Formulario de inicio de sesión con campos de correo electrónico y contraseña, incluye íconos.
-*   **Retroalimentación:** Notificaciones `SnackBar` para estados de éxito/error.
-*   ⚠️ **Limitación:** La lógica de validación no está desacoplada de los componentes de la UI, está incrustada directamente en los métodos de la pantalla.
-*   **Pendiente:** Validación en tiempo real por campo con mensajes de error debajo de los campos.
+---
 
-### Navegación Funcional
-*   **Configuración de Rutas:** Flujo de navegación de tres niveles desde inicio de sesión → pedidos Kanban → detalles del pedido.
-*   **Métodos de Navegación:** Utiliza `context.go()` para el reemplazo de rutas y `context.push()` para la navegación de pila.
-*   **Paso de Parámetros:** Parámetros de ruta con tipado seguro (ej. extracción de ID de pedido).
+## 🚀 Características Clave y Funcionalidades
 
-### Gestión de Estado
-*   **Implementación:** `StatefulWidget` integrado de Flutter con `setState()`.
-*   **Seguimiento de Estado:** Estado de inicio de sesión (`_isLogin`), listas de pedidos, estados de filtro y preferencias de ordenación.
-*   **Actualizaciones en Tiempo Real:** Actualización automática de pedidos cada 5 segundos usando `Timer.periodic`.
-*   **Consistencia de la UI:** Los cambios de estado activan actualizaciones inmediatas de la UI a través de `setState()`.
+### 1. Tablero Kanban Interactivo
+El corazón de la aplicación es su tablero Kanban, que permite:
+*   **Visualización Inteligente:** Los pedidos se renderizan como "tarjetas" con información crítica (ID del pedido, Cliente, Vehículo, Fecha).
+*   **Códigos de Color:** Priorización visual mediante colores (Oro, Plata, Bronce) según la categoría del cliente o urgencia.
+*   **Filtrado Avanzado:** Capacidad de filtrar pedidos por Estado (Ej. "Cotizado", "En Proceso") o criterio de ordenamiento (Fecha, Prioridad).
+*   **Actualización Automática:** "Polling" inteligente cada 5 segundos para asegurar que el inventario y los estados estén siempre sincronizados con el servidor.
 
-### Almacenamiento Local (Persistencia)
-*   ❌ **Estado: NO IMPLEMENTADO.**
-*   **Enfoque Actual:** La aplicación depende completamente de las llamadas a la API para la recuperación de datos.
-*   **Pendiente:** No hay uso de `shared_preferences`, `sqflite`, `hive` o paquetes de persistencia similares.
+### 2. Gestión de Seguridad y Sesión (Persistencia)
+*   **Login Seguro:** Autenticación robusta contra una API RESTful.
+*   **Auto-Login (Persistencia):** Implementación de `shared_preferences` para almacenar tokens de sesión cifrados y datos de perfil. El usuario no necesita loguearse cada vez que abre la app.
+*   **Manejo de Sesión:** Opción de "Cerrar Sesión" fácilmente accesible desde el menú lateral (Drawer), limpiando de forma segura los datos locales.
 
-### Recursos Nativos del Dispositivo
-La aplicación integra dos recursos nativos:
+### 3. Detalles de Pedido Profundos
+*   **Vista Detallada:** Al seleccionar una tarjeta, se accede a una vista profunda con:
+    *   **Datos del Cliente:** Nombre, Rut, Dirección completa.
+    *   **Datos del Vehículo:** Marca, Modelo, Año, Patente.
+    *   **Lista de Productos:** Desglose itemizado de repuestos solicitados con cantidades y precios.
 
-1.  **Acceso a Internet**
-    *   **Permiso:** `<uses-permission android:name="android.permission.INTERNET"/>` en `AndroidManifest.xml`.
-    *   **Implementación:** Peticiones HTTP a través del paquete `http` (v1.5.0).
-    *   **Uso:** Comunicación API en servicios como `KanbanService.getKanbanOrders()` y `SupplierCarService.getClientCar()`.
+### 4. Creación de Pedidos
+*   **Formularios Validados:** Interfaz para crear nuevos pedidos con validación de campos en tiempo real para asegurar la integridad de los datos antes de enviarlos al servidor.
+*   **Integración con API:** Envío de datos POST a endpoints seguros.
 
-2.  **Vibración**
-    *   **Permiso:** `<uses-permission android:name="android.permission.VIBRATE"/>` en `AndroidManifest.xml`.
-    *   **Implementación:** Paquete `vibration` (v3.1.0).
-    *   **Uso:** Retroalimentación háptica en errores de inicio de sesión (vibración de 500ms).
+### 5. Experiencia de Usuario (UX)
+*   **Navegación Fluida:** Transiciones suaves entre pantallas gestionadas por `go_router`.
+*   **Feedback Híptico:** Uso del motor de vibración del dispositivo para alertar al usuario sobre errores (ej. credenciales inválidas) sin necesidad de leer.
+*   **Menú de Acceso Rápido:** Botón flotante (Speed Dial) para acciones rápidas como "Crear Nuevo Pedido".
 
-### Animaciones
-*   ⚠️ **Implementación Actual:** Retroalimentación háptica (vibración) para estados de error.
-*   **Pendiente:** Animaciones visuales como transiciones, spinners de carga, efectos de botones o cambios de estado suaves.
-*   **Estados de Carga:** Actualmente se muestra texto estático ("Cargando Pedidos") en lugar de indicadores animados.
+---
 
-## 3. Arquitectura y Estructura del Proyecto
+## 🏗️ Arquitectura y Diseño Técnico
 
-### Patrón Arquitectónico: Arquitectura de Tres Capas
-El proyecto sigue una arquitectura por capas con una clara separación de responsabilidades:
+El proyecto sigue una **Arquitectura en Capas (Layered Architecture)** estricta para garantizar la escalabilidad, testabilidad y mantenibilidad del código.
+
+### Diagrama de Capas
+1.  **Presentation Layer (UI):** Pantallas y Widgets. No contiene lógica de negocio compleja.
+2.  **Domain/Service Layer:** Lógica de negocio, orquestación de llamadas y manejo de estado de sesión.
+3.  **Data Layer:** Modelos de datos (DTOs), repositorios y comunicación pura con la API.
+
+### Estructura de Directorios (`/lib`)
 
 ```
 lib/
-├── screens/ # Capa de Presentación (UI)
-├── services/ # Capa de Servicios (Lógica de Negocio y API)
-├── data/
-│ └── models/ # Capa de Datos (Modelos de Dominio)
-├── core/
-│ ├── components/ # Widgets Reutilizables
-│ ├── colors/ # Constantes de Tema
-│ ├── globals/ # Configuración (Env, Globales)
-│ └── utils/ # Funciones de Ayuda
+├── core/                       # Núcleo de la aplicación
+│   ├── colors/                 # Paleta de colores centralizada (PartsflowColors)
+│   ├── components/             # Widgets reutilizables (Inputs, Botones)
+│   ├── globals/                # Variables globales y de entorno (Env)
+│   └── utils/                  # Funciones utilitarias
+├── data/                       # Capa de Datos
+│   └── models/                 # Modelos serializables (JSON <-> Dart)
+│       ├── users/              # Modelo de Usuario
+│       ├── order/              # Modelo de Pedido y Productos
+│       └── clients/            # Modelo de Cliente
+├── screens/                    # Capa de Presentación (Vistas)
+│   ├── login/                  # Pantalla de Login
+│   └── orders/                 # Flujo de Pedidos
+│       ├── kanban/             # Tablero Kanban y Widgets
+│       └── create_order/       # Formulario de Creación
+├── services/                   # Capa de Lógica y Servicios
+│   ├── auth_service.dart       # Gestión de Autenticación
+│   ├── user_service.dart       # Lógica de Usuario y Perfil
+│   ├── local_storage_service.dart # Servicio de Persistencia Local
+│   ├── orders_service.dart     # Lógica de Pedidos
+│   └── ...
+└── main.dart                   # Punto de entrada y Configuración de Rutas
 ```
 
-### Componentes Clave
+---
 
-1.  **`Screens` (Capa de Presentación)**
-    *   `LoginScreen`: Interfaz de autenticación.
-    *   `KanbanOrdersScreen`: Lista principal de pedidos con filtros.
-    *   `KanbanOrderDetailsScreen`: Vista detallada del pedido.
+## 🛠️ Stack Tecnológico
 
-2.  **`Services` (Lógica de Negocio)**
-    *   `KanbanService`: Recupera pedidos Kanban de la API.
-    *   `SupplierCarService`: Recupera detalles del vehículo.
-    *   Maneja la comunicación HTTP, el análisis de respuestas y el manejo de errores.
+*   **Framework:** [Flutter](https://flutter.dev/) (UI Toolkit de Google).
+*   **Lenguaje:** [Dart](https://dart.dev/) (Optimizado para UI).
+*   **Navegación:** `go_router` (Manejo de rutas declarativo y deep linking).
+*   **Red (Networking):** `http` (Cliente REST ligero).
+*   **Persistencia:** `shared_preferences` (Almacenamiento Clave-Valor para sesión).
+*   **UI Components:** `flutter_speed_dial` (FAB expandible), `dropdown_search`.
+*   **Nativo:** `vibration` (Feedback háptico) `Wifi` (Conexión a internet).
+*   **Variables de Entorno:** `flutter_dotenv` (Gestión segura de configuración).
+*   **Testing:** `flutter_test`, `mocktail` (Mocking de dependencias).
 
-3.  **`Models` (Capa de Datos)**
-    *   `OrderRepository`: Modelo base de pedido con 56 campos.
-    *   `KanbanOrderRepository`: Modelo extendido con detalles anidados de cliente/coche.
-    *   `ClientRepository`: Modelo de información del cliente.
-    *   `ClientCarCarRepository`: Detalles del vehículo con especificaciones del coche.
+---
 
-4.  **`Configuration`**
-    *   `Env`: Lee variables de entorno del archivo `.env` (URLs de API).
-    *   `Globals`: Gestiona el estado en tiempo de ejecución (tokens de autenticación).
+## 🧪 Estrategia de Testing y Calidad
 
-### Justificación Arquitectónica
-La arquitectura de tres capas proporciona:
-*   **Separación de Responsabilidades:** La UI, la lógica de negocio y los datos están aislados.
-*   **Capacidad de Prueba:** Cada capa puede probarse independientemente.
-*   **Mantenibilidad:** Los cambios en una capa no se propagan a otras.
-*   **Escalabilidad:** Fácil de añadir nuevas características o modificar las existentes.
+El proyecto prioriza la estabilidad mediante una suite de pruebas automatizadas:
 
-### Control de Versiones y Colaboración
-*   **GitHub:** [Repository URL - *Añadir enlace a tu repositorio público aquí*]
-*   **Gestión de Proyectos:** [Trello board link o herramienta alternativa - *Añadir enlace o descripción aquí*]
+### 1. Pruebas Unitarias (Unit Tests)
+Validan la lógica de negocio aislada. Se utilizan **Mocks** (`mocktail`) para simular la API y el almacenamiento local.
+*   **Archivos Clave:** `user_service_test.dart`, `client_service_test.dart`, `orders_service_test.dart`.
+*   **Cobertura:** Verificación de códigos de estado HTTP (200, 400, 401, 500), parseo de JSON y manejo de excepciones.
 
-## 4. Instrucciones de Instalación y Ejecución
+### 2. Pruebas de Widget (Widget Tests)
+Verifican que la UI se renderice correctamente y responda a las interacciones.
+*   **Enfoque:** Simulación de taps, scrolls y entrada de texto. Verificación de presencia de widgets.
+*   **Archivos Clave:** `login_screen_test.dart`, `kanban_orders_screen_test.dart`.
+
+**Comando para ejecutar pruebas:**
+```bash
+flutter test
+```
+
+---
+
+## 📲 Guía de Inicio Rápido (Instalación)
+
+Sigue estos pasos para levantar el entorno de desarrollo:
 
 ### Prerrequisitos
-*   Flutter SDK ≥3.9.0
-*   Dart SDK ≥3.9.0 <4.0.0
-*   Android Studio o VS Code con extensiones de Flutter
-*   Emulador de Android o dispositivo físico
+*   Git instalado.
+*   Flutter SDK (v3.x o superior).
+*   Android Studio o VS Code configurado.
 
-### Pasos de Configuración
-1.  **Clonar el repositorio:**
+### Pasos
+1.  **Clonar el Repositorio**
     ```bash
-    git clone [YOUR_REPOSITORY_URL]
+    git clone https://github.com/tu-usuario/partsflow.git
     cd partsflow
     ```
-2.  **Crear archivo de entorno:**
-    Crea un archivo `.env` en la raíz del proyecto:
+
+2.  **Configurar Entorno**
+    Crea un archivo `.env` en la raíz del proyecto para definir la URL de la API:
+    ```env
+    PARTSFLOW_API_URL=https://api-staging.partsflow.com
     ```
-    PARTSFLOW_URL=https://your-api-url.com
-    ```
-3.  **Instalar dependencias:**
+
+3.  **Instalar Dependencias**
+    Descarga las librerías necesarias definidas en `pubspec.yaml`:
     ```bash
     flutter pub get
     ```
-4.  **Ejecutar la aplicación:**
+
+4.  **Ejecutar la Aplicación**
+    Inicia la app en tu emulador o dispositivo conectado:
     ```bash
     flutter run
     ```
+    *(Nota: Asegurate de tener un dispositivo Android/iOS corriendo)*
 
-### Dependencias Clave
-*   `go_router` (v14.8.1): Navegación.
-*   `http` (v1.5.0): Comunicación API.
-*   `flutter_dotenv` (v5.2.1): Configuración de entorno.
-*   `vibration` (v3.1.0): Retroalimentación háptica.
+---
 
-## 5. Guía para la Demostración (Lista de Verificación de Presentación)
+## 👥 Autor
 
-### 1. Configuración del Entorno
-*   ✅ Abrir el proyecto en el IDE.
-*   ✅ Mostrar la configuración de `.env`.
-*   ✅ Ejecutar `flutter pub get`.
-*   ✅ Iniciar en emulador/dispositivo.
-*   ✅ Verificar el inicio exitoso.
+Este proyecto es mantenido por el equipo de desarrollo de Partsflow.
+*   **Franco Carraco**
 
-### 2. Estructura y Arquitectura
-*   ✅ Explicar la arquitectura de tres capas (Screens → Services → Models).
-*   ✅ Mostrar la organización de carpetas (`lib/screens/`, `lib/services/`, `lib/data/models/`).
-*   ✅ Demostrar la separación de responsabilidades con ejemplos de código.
-*   ✅ Explicar la configuración de enrutamiento en `main.dart`.
 
-### 3. Diseño Visual y Usabilidad
-*   ✅ Mostrar el flujo de navegación (Login → Kanban → Detalles).
-*   ✅ Demostrar la jerarquía visual con tarjetas de pedido codificadas por colores.
-*   ✅ Explicar la funcionalidad de filtro y clasificación.
-*   ⚠️ **Nota:** El tema de Material 3 no está configurado explícitamente.
-
-### 4. Formularios y Validación
-*   ✅ Mostrar el formulario de inicio de sesión con campos de correo electrónico/contraseña.
-*   ✅ Demostrar la retroalimentación de errores con `SnackBar`.
-*   ⚠️ **Limitación:** La lógica de validación no está desacoplada de la UI.
-
-### 5. Gestión de Estado y Respuesta Visual
-*   ✅ Explicar el patrón `StatefulWidget` con `setState()`.
-*   ✅ Mostrar actualizaciones en tiempo real con sondeo cada 5 segundos.
-*   ✅ Demostrar cambios de estado de filtro.
-
-### 6. Animaciones y Retroalimentación Visual
-*   ✅ Mostrar la retroalimentación háptica en errores de inicio de sesión.
-*   ❌ **Faltan:** Animaciones visuales (transiciones, loaders, efectos de botones).
-
-### 7. Persistencia Local y Modularidad
-*   ❌ **NO IMPLEMENTADO:** No hay mecanismo de almacenamiento local.
-*   ✅ Modularidad demostrada a través de la arquitectura por capas.
-
-### 8. Recursos Nativos del Dispositivo
-*   ✅ **Internet:** Mostrar llamadas a la API en servicios.
-*   ✅ **Vibración:** Demostrar la vibración de error.
-*   ✅ Mostrar permisos en `AndroidManifest.xml`.
-
-### 9. Demostración de Modificación en Tiempo Real
-*   **Modificaciones sugeridas para demostrar (estar preparado para):**
-    *   Añadir validación por campo al formulario de inicio de sesión.
-    *   Extraer la lógica de validación a una clase de validador separada.
-    *   Añadir una animación de spinner de carga.
-    *   Implementar almacenamiento local básico para preferencias de usuario.
-
-## 6. Equipo del Proyecto
-
-*   [Nombre del Estudiante 1] - [Rol/Contribución]
-*   [Nombre del Estudiante 2] - [Rol/Contribución]
-
-## 7. Posibles Mejoras / Retroalimentación
-
-### Mejoras Críticas
-1.  **Persistencia de Datos Local (Requerida)**
-    *   **Problema:** No hay implementación de almacenamiento local.
-    *   **Recomendación:** Implementar `shared_preferences`, `sqflite`, `Hive`, `Isar` o similar para almacenar datos localmente.
-
-### Otras Mejoras
-*   **Desacoplamiento de Lógica de Validación:** Mover la lógica de validación de los formularios a clases o métodos separados para mejorar la modularidad y la capacidad de prueba.
-*   **Animaciones Visuales:** Integrar animaciones para transiciones, estados de carga (spinners), efectos de botones o retroalimentación visual de cambios de estado para mejorar la experiencia del usuario.
-*   **Temas de Material 3:** Configurar explícitamente el tema de Material 3 para aprovechar las últimas guías de diseño de Android.
-*   **Gestión de Estado Centralizada:** Considerar soluciones de gestión de estado más robustas como Provider, Riverpod, BLoC o GetX para una aplicación de mayor escala, lo que podría simplificar las actualizaciones de UI y el manejo de datos.```
+---
+© 2024 Partsflow. Todos los derechos reservados.

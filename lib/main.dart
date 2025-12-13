@@ -6,17 +6,24 @@ import 'package:partsflow/screens/orders/kanban/details/kanban_order_details_scr
 import 'package:partsflow/screens/orders/kanban/kanban_orders_screen.dart';
 import 'package:partsflow/screens/login/login_screen.dart';
 
+import 'package:partsflow/services/user_service.dart';
+
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
-  runApp(MainApp());
+  final bool isLoggedIn = await AuthService.tryAutoLogin();
+
+  runApp(MainApp(isLoggedIn: isLoggedIn));
 }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
+  final bool isLoggedIn;
 
-  final _router = GoRouter(
-    initialLocation: "/login",
+  MainApp({super.key, required this.isLoggedIn});
+
+  late final _router = GoRouter(
+    initialLocation: isLoggedIn ? "/orders/kanban" : "/login",
     routes: [
       GoRoute(path: "/login", builder: (context, state) => LoginScreen()),
       GoRoute(

@@ -44,7 +44,7 @@ class _SearchClientState extends State<SearchClient> {
       ),
       popupProps: const PopupProps.menu(
         showSearchBox: true,
-        searchDelay: const Duration(milliseconds: 500),
+        searchDelay: Duration(milliseconds: 500),
       ),
     );
   }
