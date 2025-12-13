@@ -15,8 +15,10 @@ class AuthService {
   static Future<LoginResponse?> login({
     required String email,
     required String password,
+    http.Client? client,
   }) async {
     var apiUrl = _Configs.apiUrl;
+    var httpClient = client ?? http.Client();
 
     // var jsonBody = jsonEncode();
 
@@ -24,14 +26,16 @@ class AuthService {
       "SIGN IN WITH CREDENTIALS: ${{"email": email, "password": password}}",
     );
 
-    final response = await http.post(
-      Uri.parse("${_Configs.apiUrl}/login/"),
-      body: jsonEncode({"email": email, "password": password}),
-      headers: {
-        "accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    ).timeout(const Duration(seconds: 10));
+    final response = await httpClient
+        .post(
+          Uri.parse("${_Configs.apiUrl}/login/"),
+          body: jsonEncode({"email": email, "password": password}),
+          headers: {
+            "accept": "application/json",
+            "Content-Type": "application/json",
+          },
+        )
+        .timeout(const Duration(seconds: 10));
 
     if (response.statusCode != 200) {
       debugPrint("ERROR BODY: ${response.body}");

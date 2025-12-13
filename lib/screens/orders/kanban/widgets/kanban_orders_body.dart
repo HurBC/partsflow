@@ -9,16 +9,20 @@ import 'package:partsflow/data/models/order/requests/order_requests.dart';
 import 'package:partsflow/screens/orders/widgets/order_card.dart';
 import 'package:partsflow/services/orders/kanban_service.dart';
 
+import 'package:http/http.dart' as http;
+
 const int KANBAN_PAGE_SIZE = 10;
 
 class KanbanOrdersBody extends StatefulWidget {
-  const KanbanOrdersBody({super.key});
+  final http.Client? httpClient;
+
+  const KanbanOrdersBody({super.key, this.httpClient});
 
   @override
-  State<KanbanOrdersBody> createState() => _KanbanOrdersBodyState();
+  State<KanbanOrdersBody> createState() => KanbanOrdersBodyState();
 }
 
-class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
+class KanbanOrdersBodyState extends State<KanbanOrdersBody> {
   /* States */
   Timer? _timer;
 
@@ -40,7 +44,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
     super.initState();
 
     _timer?.cancel();
-    _loadAllOrders();
+    loadAllOrders();
   }
 
   @override
@@ -50,7 +54,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
     super.dispose();
   }
 
-  Future<void> _loadAllOrders({bool immediateLoad = false}) async {
+  Future<void> loadAllOrders({bool immediateLoad = false}) async {
     // Cancel the current timer
     _timer?.cancel();
 
@@ -64,11 +68,12 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
         status: _kanbanOrdersStatus,
         sortByCategory: _categorySortType,
         sortByEstimatedTicket: _ticketSortType,
-        sortBy: _createdAtSortType
+        sortBy: _createdAtSortType,
       );
 
       final data = await KanbanService.getKanbanOrders(
-        params
+        params,
+        client: widget.httpClient,
       );
 
       setState(() {
@@ -84,11 +89,12 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
         status: _kanbanOrdersStatus,
         sortByCategory: _categorySortType,
         sortByEstimatedTicket: _ticketSortType,
-        sortBy: _createdAtSortType
+        sortBy: _createdAtSortType,
       );
 
       final data = await KanbanService.getKanbanOrders(
-        params
+        params,
+        client: widget.httpClient,
       );
 
       setState(() {
@@ -110,7 +116,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
       _selectedKanbanOrderStatus = selectedOption;
     });
 
-    _loadAllOrders(immediateLoad: true);
+    loadAllOrders(immediateLoad: true);
   }
 
   void _handleOnCategoryChange(SortTagSortingType sortType) {
@@ -118,7 +124,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
       _categorySortType = sortType;
     });
 
-    _loadAllOrders(immediateLoad: true);
+    loadAllOrders(immediateLoad: true);
   }
 
   void _handleOnTicketChange(SortTagSortingType sortType) {
@@ -126,7 +132,7 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
       _ticketSortType = sortType;
     });
 
-    _loadAllOrders(immediateLoad: true);
+    loadAllOrders(immediateLoad: true);
   }
 
   void _handleOnDateChange(SortTagSortingType sortType) {
@@ -134,63 +140,72 @@ class _KanbanOrdersBodyState extends State<KanbanOrdersBody> {
       _createdAtSortType = sortType;
     });
 
-    _loadAllOrders(immediateLoad: true);
+    loadAllOrders(immediateLoad: true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      DropdownButton<({String label, String value})>(
-                        value: _selectedKanbanOrderStatus,
-                        items: kanbanStatus.map((status) {
-                          return DropdownMenuItem<
-                            ({String label, String value})
-                          >(value: status, child: Text(status.label));
-                        }).toList(),
-                        onChanged: _handleOnKanbanOrderStatusChange,
-                      ),
-                      const Spacer(),
-                      Text("${_kanbanOrders.length} pedidos"),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SortTagFilter(name: "Fecha", onSortTypeChange: _handleOnDateChange,),
-                      SortTagFilter(name: "Prioridad", onSortTypeChange: _handleOnCategoryChange,),
-                      SortTagFilter(name: "Plata", onSortTypeChange: _handleOnTicketChange,),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: _isKanbanLoading
-                  ? const Text("Cargando Pedidos")
-                  : _kanbanOrders.isEmpty
-                  ? const Text("Sin pedidos en este estado")
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(8.0),
-                      itemCount: _kanbanOrders.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: OrderCard(order: _kanbanOrders[index]),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    DropdownButton<({String label, String value})>(
+                      value: _selectedKanbanOrderStatus,
+                      items: kanbanStatus.map((status) {
+                        return DropdownMenuItem<({String label, String value})>(
+                          value: status,
+                          child: Text(status.label),
                         );
-                      },
+                      }).toList(),
+                      onChanged: _handleOnKanbanOrderStatusChange,
                     ),
+                    const Spacer(),
+                    Text("${_kanbanOrders.length} pedidos"),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SortTagFilter(
+                      name: "Fecha",
+                      onSortTypeChange: _handleOnDateChange,
+                    ),
+                    SortTagFilter(
+                      name: "Prioridad",
+                      onSortTypeChange: _handleOnCategoryChange,
+                    ),
+                    SortTagFilter(
+                      name: "Plata",
+                      onSortTypeChange: _handleOnTicketChange,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            
-          ],
-        ),
-      );
+          ),
+          Expanded(
+            child: _isKanbanLoading
+                ? const Text("Cargando Pedidos")
+                : _kanbanOrders.isEmpty
+                ? const Text("Sin pedidos en este estado")
+                : ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: _kanbanOrders.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: OrderCard(order: _kanbanOrders[index]),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
   }
 }

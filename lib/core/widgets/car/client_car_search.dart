@@ -5,12 +5,13 @@ import 'package:partsflow/core/widgets/car/client_car_info.dart';
 import 'package:partsflow/core/widgets/card.dart';
 import 'package:partsflow/data/abstract_models/cars/car.dart';
 import 'package:partsflow/data/abstract_models/cars/client_car.dart';
-import 'package:partsflow/data/requests/brand.dart';
 import 'package:partsflow/data/requests/car.dart';
 import 'package:partsflow/services/cars/car_service.dart';
 
 class ClientCarSearch extends StatefulWidget {
-  const ClientCarSearch({super.key});
+  final void Function(ClientCar<Car<int>>) onClientCarSelected;
+
+  const ClientCarSearch({super.key, required this.onClientCarSelected});
 
   @override
   State<ClientCarSearch> createState() => _ClientCarSearchState();
@@ -44,6 +45,8 @@ class _ClientCarSearchState extends State<ClientCarSearch> {
 
       if (data.results.isNotEmpty) {
         _clientCar = data.results.first;
+
+        widget.onClientCarSelected(data.results.first);
       }
     });
   }

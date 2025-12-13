@@ -25,7 +25,11 @@ class CreateOrderScreen extends StatelessWidget {
           style: const TextStyle(color: PartsflowColors.secondary),
         ),
       ),
-      body: CreateOrderBody(),
+      body: CreateOrderBody(
+        onOrderCreated: () {
+          context.pop();
+        },
+      ),
     );
   }
 }

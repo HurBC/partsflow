@@ -40,7 +40,7 @@ class _OrderDetailInfoState extends State<OrderDetailInfo> {
     });
 
     final data = await SupplierCarService.getClientCar(
-      clientCarId: _orderDetail!.clientCar,
+      clientCarId: _orderDetail!.clientCar!,
     );
 
     setState(() {

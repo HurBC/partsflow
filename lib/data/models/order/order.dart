@@ -28,7 +28,7 @@ class OrderModel {
   final String? aiMarkAsPurchaseAt;
   final String subsidiary;
   final String? client;
-  final int clientCar;
+  final int? clientCar;
   final String? responsible;
   final String? acceptedAt;
   final String? quotationsExpirationDate;
@@ -152,7 +152,7 @@ class OrderModel {
       aiMarkAsPurchaseAt: json['ai_mark_as_purchase_at'] as String?,
       subsidiary: json['subsidiary'] as String,
       client: json['client'] as String?,
-      clientCar: json['client_car'] ?? -1,
+      clientCar: json['client_car'],
       responsible: json['responsible'] as String?,
       acceptedAt: json['accepted_at'] as String?,
       quotationsExpirationDate: json['quotations_expiration_date'] as String?,
@@ -268,9 +268,9 @@ class KanbanOrderModel extends OrderModel {
         ? UserModel.fromJson(json["responsible"])
         : null;
 
-    ClientKanbanModel client = ClientKanbanModel.fromJson(
+    ClientKanbanModel? client = json.containsKey("client") && json["client"] != null ? ClientKanbanModel.fromJson(
       json['client'],
-    );
+    ) : null;
 
     ClientCarSimpleCar? clientCar =
         json.containsKey("client_car") && json["client_car"] != null
@@ -305,7 +305,7 @@ class KanbanOrderModel extends OrderModel {
       isAiMarkAsPurchase: baseOrder.isAiMarkAsPurchase,
       aiMarkAsPurchaseAt: baseOrder.aiMarkAsPurchaseAt,
       subsidiary: baseOrder.subsidiary,
-      client: client.id ?? "",
+      client: client?.id ?? "",
       clientCar: clientCar?.id ?? -1,
       responsible: responsible?.id ?? "",
       acceptedAt: baseOrder.acceptedAt,

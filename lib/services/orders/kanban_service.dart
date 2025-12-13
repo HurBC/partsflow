@@ -19,10 +19,12 @@ class _Configs {
 
 class KanbanService {
   static Future<List<KanbanOrderModel>> getKanbanOrders(
-    ListOrders params,
-  ) async {
+    ListOrders params, {
+    http.Client? client,
+  }) async {
     final queryParams = StringBuffer("");
     final mapParams = params.toMap();
+    var httpClient = client ?? http.Client();
 
     for (var element in mapParams.entries) {
       String key = element.key;
@@ -39,8 +41,6 @@ class KanbanService {
 
         queryParams.write("$key=$listValues");
       } else if (value is SortTagSortingType) {
-
-
         if (key == "sort_by_category") {
           queryParams.write(
             "$key=${value == SortTagSortingType.descendant ? "-category_weight" : "category_weight"}",
@@ -63,7 +63,7 @@ class KanbanService {
 
     debugPrint("GETTING ORDERS WITH PARAMS ${queryParams.toString()}");
 
-    final response = await http.get(
+    final response = await httpClient.get(
       Uri.parse("${_Configs.apiUrl}/?${queryParams.toString()}"),
       headers: _Configs.headers,
     );
@@ -82,9 +82,7 @@ class KanbanService {
     List<KanbanOrderModel> orders = List.empty(growable: true);
 
     for (var decodedOrder in decodedBody["results"] as List) {
-      KanbanOrderModel order = KanbanOrderModel.fromJson(
-        decodedOrder,
-      );
+      KanbanOrderModel order = KanbanOrderModel.fromJson(decodedOrder);
 
       orders.add(order);
     }

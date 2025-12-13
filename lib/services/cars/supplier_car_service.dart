@@ -20,7 +20,7 @@ extension SupplierCarService on CarService {
   static Future<ClientCarCarModel> getClientCar({
     required int clientCarId
   }) async {
-    debugPrint("GETTING CLIENT CAR INFO");
+    debugPrint("GETTING CLIENT CAR INFO $clientCarId");
 
     final uri = Uri.parse("${_Configs.apiUrl}/$clientCarId");
 
